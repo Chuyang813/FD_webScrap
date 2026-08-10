@@ -22,7 +22,9 @@ class LLMSettings(BaseModel):
     model: str | None = None
     api_key: str | None = Field(default=None, repr=False)
     base_url: str | None = None
-    timeout_seconds: float = Field(default=30, gt=0)
+    # Structured extraction over a bounded page context genuinely exceeded 30s in
+    # testing, so the default allows for a slow generation before retrying.
+    timeout_seconds: float = Field(default=60, gt=0)
 
     @classmethod
     def from_env(cls, environ: Mapping[str, str] | None = None) -> "LLMSettings":
@@ -148,7 +150,15 @@ class OpenAICompatibleAdapter:
             for attempt in range(self.max_retries + 1):
                 await self._respect_rate_limit()
                 self._last_call_at = time.monotonic()
-                response = await client.post(endpoint, headers=headers, json=payload_body)
+                try:
+                    response = await client.post(endpoint, headers=headers, json=payload_body)
+                except (httpx.TimeoutException, httpx.TransportError):
+                    # Transient transport faults get the same budget as a 429;
+                    # a slow generation is not a permanent failure.
+                    if attempt == self.max_retries:
+                        raise
+                    await self._sleep(float(2**attempt))
+                    continue
                 if response.status_code != 429:
                     break
                 if attempt == self.max_retries:

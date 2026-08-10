@@ -104,6 +104,42 @@ async def test_rate_limiter_paces_consecutive_calls() -> None:
 
 
 @pytest.mark.asyncio
+async def test_read_timeout_is_retried_then_succeeds() -> None:
+    """A slow generation is transient, not a permanent failure."""
+
+    calls = {"n": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise httpx.ReadTimeout("too slow", request=request)
+        return httpx.Response(200, json=VALID_BODY)
+
+    adapter, slept = _adapter(handler)
+    result = await adapter.extract(context="{}")
+
+    assert result.product.name == "Example"
+    assert calls["n"] == 2
+    assert slept, "a transport failure should back off before retrying"
+
+
+@pytest.mark.asyncio
+async def test_persistent_timeout_surfaces_after_retries() -> None:
+    calls = {"n": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["n"] += 1
+        raise httpx.ReadTimeout("too slow", request=request)
+
+    adapter, _ = _adapter(handler, max_retries=2)
+
+    with pytest.raises(httpx.ReadTimeout):
+        await adapter.extract(context="{}")
+
+    assert calls["n"] == 3
+
+
+@pytest.mark.asyncio
 async def test_shadow_extractor_stops_sampling_after_quota_exhaustion() -> None:
     calls = {"n": 0}
 
