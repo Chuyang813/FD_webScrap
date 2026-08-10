@@ -48,6 +48,7 @@ class OutputConfig(BaseModel):
     csv_path: Path = Path("output/products.csv")
     agreement_path: Path = Path("output/agreement_report.json")
     run_report_path: Path = Path("output/run_report.json")
+    dashboard_path: Path = Path("output/dashboard.html")
 
 
 class LLMConfig(BaseModel):

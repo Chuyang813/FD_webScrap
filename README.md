@@ -51,7 +51,7 @@ LLM is optional and off by default when `--no-llm` is passed.
 | Categories covered | 2 of 2 |
 | Extraction failures | 0 |
 | Cross-extractor agreement (core fields) | 0.997 over 12 sampled products |
-| Automated tests | 74 passing |
+| Automated tests | 86 passing |
 
 Both assigned categories are crawled to completion. The full run took about nine
 minutes at one request per second and required no retries.
@@ -176,6 +176,7 @@ is a single implementation swap.
 | **Recovery** | Recording triggers (missing field, validation failure, agreement drop) and review suggestions | Modify selectors automatically |
 | **Shadow LLM** | Bounded structured context, strict-schema extraction, local validation | Participate in the normal crawl path |
 | **Comparator** | Field-level agreement between the two extractors, using per-type comparison rules | Claim accuracy |
+| **Reporting** | Rendering the stored catalogue and run artifacts as a dashboard | Touch the crawl — a render failure is logged, never fatal |
 
 The Recovery agent is deliberately advisory. It produces auditable
 `RecoveryRecord` entries with `selectors_modified: False` as a type-level
@@ -274,6 +275,22 @@ The human and machine views never share a stream. With the progress view active,
 structured JSON events are written to `logs/crawler.jsonl` instead of stderr, so
 piping output to a log processor still yields clean JSON lines.
 
+### Reading the results
+
+Every run also writes `output/dashboard.html`, a self-contained page rendering the
+four data-quality signals described below. Open it directly — no server, no
+network access, no third-party libraries, and light and dark themes both selected
+rather than auto-flipped.
+
+```bash
+python -m reporting --open
+```
+
+That regenerates it from the existing database and reports without crawling, so
+inspecting results never costs a request. Every chart carries a table view beneath
+it, which is both the accessibility fallback and the way values stay reachable
+without hovering.
+
 ### Configuration
 
 All runtime behaviour lives in [`config.yaml`](config.yaml): rate limit,
@@ -294,6 +311,7 @@ change is needed to retarget or retune the crawl.
 | `output/products.csv` | Flat, one row per variant |
 | `output/run_report.json` | Status, metrics, discovery, completeness, provenance, audits |
 | `output/agreement_report.json` | Shadow evidence and field-level agreement, or skip reason |
+| `output/dashboard.html` | Self-contained data-quality dashboard |
 
 Exports are regenerated from the database on every run, so they always reflect
 the full stored catalogue rather than only the rows one run touched. The
@@ -424,8 +442,8 @@ rather than assuming permission.
 
 ## Data quality monitoring
 
-The run report already emits four independent signals, each catching a different
-failure mode.
+The run report emits four independent signals, each catching a different failure
+mode, and `output/dashboard.html` renders all four for reading at a glance.
 
 **1. Field completeness.** Per-field population rates for products and variants.
 Catches an extractor that silently stops finding a field.
@@ -599,7 +617,7 @@ Stated plainly rather than hidden; each notes what would resolve it.
 
 ## Testing
 
-74 tests, no network access required. Provider traffic is mocked, so the suite
+86 tests, no network access required. Provider traffic is mocked, so the suite
 spends no API quota:
 
 ```bash
@@ -618,6 +636,7 @@ python -m pytest -q
 | Comparator | Exact, numeric, set, and structured comparison; missing-field disagreement |
 | Shadow LLM | Strict schema handling, skip behaviour, provider failure as evidence |
 | Orchestrator | Completed, partial, zero-discovery, and redirect paths |
+| Dashboard | Completeness maths, provenance counts, self-containment, both themes |
 
 Fixtures make extraction reproducible without hitting the live site, which also
 means a future selector change can be tested before deployment.

@@ -35,6 +35,7 @@ output:
   csv_path: "output/products.csv"
   agreement_path: "output/agreement_report.json"
   run_report_path: "output/run_report.json"
+  dashboard_path: "output/dashboard.html"
 
 llm:
   enabled: true

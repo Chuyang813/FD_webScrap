@@ -21,6 +21,7 @@ from fetchers import CachedFetcher, FetchRequest, HttpFetcher
 from llm import LLMSettings, ShadowEvidence, ShadowLLMExtractor
 from models import CrawlStatus, ExtractionResult, FieldSource, PageType, PriceVisibility
 from policy import RobotsDecision, RobotsPolicy
+from reporting import write_dashboard
 from run_metrics import RunMetrics
 from storage import Database, ProductRepository, export_products_csv, export_products_json
 from utils.logging import get_json_logger, log_event
@@ -116,6 +117,7 @@ class CatalogOrchestrator:
             export_products_csv(self.repository, self.config.output.csv_path)
             agreement = self._write_agreement_report()
             report = self._write_run_report(agreement)
+            self._write_dashboard()
             self.progress.shadow(
                 status=str(agreement.get("status", "skipped")),
                 sample=int(agreement.get("sample_size") or 0),
@@ -155,6 +157,25 @@ class CatalogOrchestrator:
             flags.append("resume")
         flags.append("no-llm" if self.options.no_llm else "llm-shadow")
         return ", ".join(flags)
+
+    def _write_dashboard(self) -> None:
+        """Presentation must never be able to fail a crawl that already succeeded."""
+
+        try:
+            write_dashboard(
+                self.config.output.dashboard_path,
+                sqlite_path=self.config.storage.sqlite_path,
+                run_report_path=self.config.output.run_report_path,
+                agreement_path=self.config.output.agreement_path,
+                agreement_threshold=self.config.llm.agreement_threshold,
+            )
+        except Exception as exc:
+            log_event(
+                self.logger,
+                "dashboard_render_failed",
+                path=str(self.config.output.dashboard_path),
+                error=f"{type(exc).__name__}: {exc}",
+            )
 
     def _nothing_pending_note(self) -> str:
         """Explain an empty work list so it does not read as a failed crawl."""

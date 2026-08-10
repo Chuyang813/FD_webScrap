@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Safco catalogue — data quality</title>
+<style>
+.viz-root {
+  color-scheme: light;
+  --surface-1: #fcfcfb;
+  --plane: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --neutral-fill: #c3c2b7;
+  --track: #eceae4;
+  --good: #0ca30c;
+  --warning: #fab219;
+  --critical: #d03b3b;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --plane: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --neutral-fill: #56554f;
+    --track: #262624;
+  }
+}
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --surface-1: #1a1a19;
+  --plane: #0d0d0d;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --grid: #2c2c2a;
+  --baseline: #383835;
+  --border: rgba(255,255,255,0.10);
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --neutral-fill: #56554f;
+  --track: #262624;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--plane); }
+.viz-root {
+  background: var(--plane);
+  color: var(--text-primary);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: 32px 20px 64px;
+}
+.wrap { max-width: 1080px; margin: 0 auto; }
+
+header.page { margin-bottom: 28px; }
+h1 { font-size: 24px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.01em; }
+.sub { color: var(--text-secondary); font-size: 14px; margin: 0; }
+.meta { color: var(--text-muted); font-size: 13px; margin: 10px 0 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 4px 12px 4px 10px; font-size: 13px; font-weight: 500;
+  background: var(--surface-1); color: var(--text-primary);
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+
+.kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 30px; }
+.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+.tile .label { color: var(--text-secondary); font-size: 13px; margin-bottom: 6px; }
+.tile .value { font-size: 27px; font-weight: 600; letter-spacing: -0.02em; }
+.tile .note { color: var(--text-muted); font-size: 12.5px; margin-top: 4px; }
+.tile.hero .value { font-size: 50px; line-height: 1.05; font-weight: 600; }
+
+section.card {
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px 22px; margin-bottom: 18px;
+}
+h2 { font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+.desc { color: var(--text-secondary); font-size: 13.5px; margin: 0 0 18px; max-width: 78ch; }
+.group-label {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); margin: 20px 0 10px;
+}
+.group-label:first-child { margin-top: 0; }
+
+.rows { display: flex; flex-direction: column; gap: 9px; }
+.row { display: grid; grid-template-columns: minmax(96px, 172px) 1fr auto; align-items: center; gap: 14px; }
+.row .name { color: var(--text-secondary); font-size: 13.5px; overflow-wrap: anywhere; }
+.track {
+  position: relative; height: 12px; background: var(--track);
+  border-radius: 2px; overflow: visible;
+}
+.fill { height: 100%; border-radius: 2px 4px 4px 2px; min-width: 2px; }
+.row .val {
+  font-size: 13px; color: var(--text-primary); font-variant-numeric: tabular-nums;
+  min-width: 64px; text-align: right;
+}
+.threshold {
+  position: absolute; top: -5px; bottom: -5px; width: 1px;
+  background: var(--baseline);
+}
+.threshold::after {
+  content: attr(data-label); position: absolute; top: -17px; left: 50%;
+  transform: translateX(-50%); white-space: nowrap;
+  font-size: 11px; color: var(--text-muted);
+}
+
+.stack { display: flex; gap: 2px; height: 22px; border-radius: 2px; overflow: hidden; }
+.seg { position: relative; min-width: 3px; }
+.seg:first-child { border-radius: 2px 0 0 2px; }
+.seg:last-child { border-radius: 0 2px 2px 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; }
+.key { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+.key .swatch { width: 11px; height: 11px; border-radius: 2px; flex: none; }
+.key b { color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+[data-tip] { cursor: default; }
+[data-tip]:hover::after, [data-tip]:focus-visible::after {
+  content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px);
+  transform: translateX(-50%); z-index: 20;
+  background: var(--text-primary); color: var(--surface-1);
+  font-size: 12.5px; line-height: 1.4; white-space: nowrap;
+  padding: 6px 9px; border-radius: 6px; pointer-events: none;
+}
+.hit { position: absolute; inset: -7px 0; }
+
+details { margin-top: 18px; border-top: 1px solid var(--grid); padding-top: 12px; }
+summary { cursor: pointer; font-size: 13px; color: var(--text-secondary); }
+summary:hover { color: var(--text-primary); }
+table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 13px; }
+th, td { text-align: left; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--grid); }
+th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.scroll { overflow-x: auto; }
+
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 26px; }
+.note-box {
+  border-left: 2px solid var(--baseline); padding: 2px 0 2px 14px;
+  color: var(--text-secondary); font-size: 13.5px; margin-top: 18px; max-width: 78ch;
+}
+footer.page { color: var(--text-muted); font-size: 12.5px; margin-top: 28px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+
+<header class="page">
+  <h1>Safco catalogue &mdash; data quality</h1>
+  <p class="sub">Sutures &amp; Surgical Products and Dental Exam Gloves, extracted by
+  the Frontier Dental catalogue agent.</p>
+  <p class="meta">
+    <span class="badge"><span class="dot" style="background:var(--warning)"></span>
+      run partial</span>
+    &nbsp; generated 2026-08-10 21:23 UTC · last run 0s
+  </p>
+</header>
+
+<div class="kpi"><div class="tile hero"><div class="label">Product families</div><div class="value">0</div><div class="note">of 1 discovered</div></div><div class="tile"><div class="label">Variants</div><div class="value">0</div><div class="note">purchasable child items</div></div><div class="tile"><div class="label">Coverage</div><div class="value">0%</div><div class="note">extracted of discovered</div></div><div class="tile"><div class="label">Failures</div><div class="value">1</div><div class="note">in the last run</div></div></div>
+
+
+<section class="card">
+  <h2>Discovery coverage</h2>
+  <p class="desc">Product families found per assigned category. Discovery uses the
+  public search index the site's own front end calls, because
+  <code>robots.txt</code> disallows the query pagination the UI advertises.</p>
+  <div class="rows"><div class="row"><div class="name">sutures surgical</div><div class="track" data-tip="sutures_surgical: 1 families discovered via unknown (completed)" tabindex="0"><div class="hit"></div><div class="fill" style="width:100.0000%;background:var(--series-1)"></div></div><div class="val">1</div></div></div>
+  <details><summary>Table view</summary><div class="scroll"><table><thead><tr><th>Category</th><th class="num">Families</th><th class="num">Method</th><th class="num">Status</th></tr></thead><tbody><tr><td>sutures_surgical</td><td class="num">1</td><td class="num">unknown</td><td class="num">completed</td></tr></tbody></table></div></details>
+</section>
+
+<section class="card">
+  <h2>Field completeness</h2>
+  <p class="desc">Share of records carrying a real value. Two fields sit at zero by
+  verified absence rather than extractor failure: Safco's product pages contain no
+  specification markup, and recommendations are hydrated client-side, so both are
+  emitted empty with <code>not_available</code> provenance instead of being
+  invented.</p>
+  <div class="two">
+    <div><div class="group-label">Product · 0 rows</div><div class="rows"><div class="row"><div class="name">name</div><div class="track" data-tip="name: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">brand</div><div class="track" data-tip="brand: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">category path</div><div class="track" data-tip="category_path: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">description</div><div class="track" data-tip="description: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">specifications</div><div class="track" data-tip="specifications: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">image urls</div><div class="track" data-tip="image_urls: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">alternative products</div><div class="track" data-tip="alternative_products: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">price visibility</div><div class="track" data-tip="price_visibility: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div></div></div>
+    <div><div class="group-label">Variant · 0 rows</div><div class="rows"><div class="row"><div class="name">sku</div><div class="track" data-tip="sku: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">item number</div><div class="track" data-tip="item_number: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">product code</div><div class="track" data-tip="product_code: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">price</div><div class="track" data-tip="price: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">currency</div><div class="track" data-tip="currency: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">unit pack size</div><div class="track" data-tip="unit_pack_size: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">availability</div><div class="track" data-tip="availability: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div><div class="row"><div class="name">image urls</div><div class="track" data-tip="image_urls: 0 of 0 populated" tabindex="0"><div class="hit"></div><div class="fill" style="width:0.0000%;background:var(--series-1)"></div></div><div class="val">0%</div></div></div></div>
+  </div>
+  <details><summary>Table view</summary><div class="scroll"><table><thead><tr><th>Level</th><th>Field</th><th class="num">Complete</th><th class="num">Rows</th></tr></thead><tbody><tr><td>product</td><td>name</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>product</td><td>brand</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>product</td><td>category_path</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>product</td><td>description</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>product</td><td>specifications</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>product</td><td>image_urls</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>product</td><td>alternative_products</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>product</td><td>price_visibility</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>sku</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>item_number</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>product_code</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>price</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>currency</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>unit_pack_size</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>availability</td><td class="num">0%</td><td class="num">0</td></tr><tr><td>variant</td><td>image_urls</td><td class="num">0%</td><td class="num">0</td></tr></tbody></table></div></details>
+</section>
+
+
+<section class="card">
+  <h2>Cross-extractor agreement</h2>
+  <p class="desc">No shadow comparison is available in this report
+  (<code>skipped</code>). Configure a provider in <code>.env</code> and run
+  with <code>--shadow-sample N</code> to populate it.</p>
+</section>
+
+
+<section class="card">
+  <h2>Crawl health</h2>
+  <p class="desc">Checkpoint state, price visibility, and the families carrying the
+  most variants. Price is always stored with an explicit visibility state, so a null
+  price is never ambiguous between "gated" and "we failed to read it".</p>
+  <div class="two">
+    <div>
+      <div class="group-label">Crawl state</div>
+      <div class="scroll"><table><thead><tr><th>Status</th><th class="num">URLs</th></tr></thead><tbody></tbody></table></div>
+      <div class="group-label">Price visibility</div>
+      <div class="scroll"><table><thead><tr><th>State</th><th class="num">Families</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div>
+      <div class="group-label">Recorded errors (cumulative)</div>
+      <p class="desc">None recorded.</p>
+      <div class="group-label">Most variants per family</div>
+      <div class="scroll"><table><thead><tr><th>Family</th><th class="num">Variants</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+  
+</section>
+
+<footer class="page">
+  Generated from <code>data/catalog.db</code>, <code>output/run_report.json</code>,
+  and <code>output/agreement_report.json</code>. No network access, no external
+  assets.
+</footer>
+
+</div>
+</div>
+</body>
+</html>
