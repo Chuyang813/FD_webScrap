@@ -41,6 +41,24 @@ def build_parser() -> argparse.ArgumentParser:
         type=nonnegative_int,
         help="number of extracted products sampled by the optional LLM",
     )
+    progress = parser.add_mutually_exclusive_group()
+    progress.add_argument(
+        "--progress",
+        dest="progress",
+        action="store_true",
+        default=None,
+        help="force the live progress view (default: on when stderr is a terminal)",
+    )
+    progress.add_argument(
+        "--no-progress",
+        dest="progress",
+        action="store_false",
+        help="disable the live progress view and log JSON events to stderr",
+    )
+    parser.add_argument(
+        "--log-path",
+        help="write JSON events to this file instead of stderr",
+    )
     return parser
 
 
@@ -53,6 +71,8 @@ async def run_from_args(args: argparse.Namespace) -> dict[str, object]:
         offline=args.offline,
         no_llm=args.no_llm,
         shadow_sample=args.shadow_sample,
+        progress=args.progress,
+        log_path=args.log_path,
     )
     return await CatalogOrchestrator(config, options).run()
 

@@ -232,6 +232,37 @@ python -m pytest -q                              # test suite
 **Exit codes:** `0` completed, `2` partial, `1` failed. A partial run cannot be
 mistaken for success by CI or a scheduler.
 
+### Watching a run
+
+When stderr is a terminal, a live progress view is shown: robots decision,
+per-category discovery, a completion bar with ETA, and one line per product with
+its variant count and whether it came from cache.
+
+```text
+  Safco Dental catalog crawl
+  categories: sutures_surgical, gloves   mode: resume, llm-shadow
+
+  robots      ALLOWED (enforced)
+  discovery   sutures_surgical       56 families   algolia
+  discovery   gloves                 98 families   algolia
+
+  extracting 147 product families
+  ok   http  gloves           › aurelia-vibrant-trade      4 var
+  ok   cache sutures_surgical › surgifoam-reg              6 var
+  ████████░░░░░░░░░░░░░░ 54/147  36%  prod 54 var 171 cache 12 err 0  01:12 eta 02:04
+```
+
+| Flag | Effect |
+|---|---|
+| *(default)* | Progress view on when stderr is a terminal, off when redirected |
+| `--progress` | Force the view on |
+| `--no-progress` | Force it off; JSON events go to stderr as before |
+| `--log-path PATH` | Write JSON events to a file |
+
+The human and machine views never share a stream. With the progress view active,
+structured JSON events are written to `logs/crawler.jsonl` instead of stderr, so
+piping output to a log processor still yields clean JSON lines.
+
 ### Configuration
 
 All runtime behaviour lives in [`config.yaml`](config.yaml): rate limit,

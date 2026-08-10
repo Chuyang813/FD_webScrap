@@ -24,6 +24,7 @@ from policy import RobotsDecision, RobotsPolicy
 from run_metrics import RunMetrics
 from storage import Database, ProductRepository, export_products_csv, export_products_json
 from utils.logging import get_json_logger, log_event
+from utils.progress import ProgressReporter
 
 
 @dataclass(slots=True)
@@ -34,6 +35,8 @@ class RunOptions:
     offline: bool = False
     no_llm: bool = False
     shadow_sample: int | None = None
+    progress: bool | None = None
+    log_path: str | None = None
 
 
 @dataclass(slots=True)
@@ -48,7 +51,13 @@ class CatalogOrchestrator:
     def __init__(self, config: AppConfig, options: RunOptions | None = None) -> None:
         self.config = config
         self.options = options or RunOptions()
-        self.logger = get_json_logger()
+        self.progress = ProgressReporter(enabled=self.options.progress)
+        # A live progress view owns stderr, so the JSON stream moves to a file.
+        log_path = self.options.log_path
+        if log_path is None and self.progress.enabled:
+            log_path = "logs/crawler.jsonl"
+        self.log_path = log_path
+        self.logger = get_json_logger(log_path=log_path)
         self.metrics = RunMetrics()
         self.database = Database(config.storage.sqlite_path)
         self.repository = ProductRepository(self.database)
@@ -85,16 +94,30 @@ class CatalogOrchestrator:
 
     async def run(self) -> dict[str, Any]:
         try:
+            self.progress.run_started(
+                categories=[category.name for category in self.config.categories],
+                mode=self._describe_mode(),
+            )
             await self._load_robots()
             discovered = await self._discover_categories()
             candidates = self._eligible_candidates(discovered)
             self.products_planned = len(candidates)
+            self.progress.crawl_started(total=len(candidates))
             for candidate in candidates:
                 await self._process_product(candidate)
             export_products_json(self.repository, self.config.output.json_path)
             export_products_csv(self.repository, self.config.output.csv_path)
             agreement = self._write_agreement_report()
             report = self._write_run_report(agreement)
+            self.progress.shadow(
+                status=str(agreement.get("status", "skipped")),
+                sample=int(agreement.get("sample_size") or 0),
+                agreement=agreement.get("overall_agreement"),
+            )
+            self.progress.finished(
+                status=str(report.get("status", "failed")),
+                outputs=self._progress_outputs(),
+            )
             log_event(
                 self.logger,
                 "export_complete",
@@ -110,6 +133,28 @@ class CatalogOrchestrator:
             self.metrics.cache_hits = self.fetcher.stats.hits
             await self.http_fetcher.aclose()
             self.database.close()
+
+    def _describe_mode(self) -> str:
+        flags = []
+        if self.options.offline:
+            flags.append("offline")
+        if self.options.force_refresh:
+            flags.append("force-refresh")
+        if self.options.resume:
+            flags.append("resume")
+        flags.append("no-llm" if self.options.no_llm else "llm-shadow")
+        return ", ".join(flags)
+
+    def _progress_outputs(self) -> dict[str, str]:
+        outputs = {
+            "sqlite": str(self.config.storage.sqlite_path),
+            "json": str(self.config.output.json_path),
+            "csv": str(self.config.output.csv_path),
+            "report": str(self.config.output.run_report_path),
+        }
+        if self.log_path:
+            outputs["log"] = str(self.log_path)
+        return outputs
 
     async def _load_robots(self) -> None:
         category = self.config.categories[0]
@@ -141,6 +186,10 @@ class CatalogOrchestrator:
             "robots_policy_checked",
             url=robots_url,
             decision=self.robots_decision.value,
+            enforced=self.config.robots.enforce,
+        )
+        self.progress.robots(
+            decision=self.robots_decision.value.upper(),
             enforced=self.config.robots.enforce,
         )
         if (
@@ -204,6 +253,12 @@ class CatalogOrchestrator:
                     method=self.navigator.last_method,
                     discovered=len(records),
                 )
+                self.progress.category_discovered(
+                    name=category.name,
+                    count=len(records),
+                    method=str(self.navigator.last_method),
+                    degraded=degraded,
+                )
             except Exception as exc:
                 self.metrics.failures += 1
                 error = f"{type(exc).__name__}: {exc}"
@@ -228,6 +283,7 @@ class CatalogOrchestrator:
                     category=category.name,
                     error=error,
                 )
+                self.progress.category_failed(name=category.name, error=error)
 
         unique_groups = self._deduplicate_round_robin(groups)
         self.metrics.urls_discovered = sum(len(group) for group in unique_groups)
@@ -407,6 +463,13 @@ class CatalogOrchestrator:
                 extraction_method=result.method_summary,
                 variants=len(result.variants),
             )
+            self.progress.product_done(
+                category=candidate.category.name,
+                url=result.product.product_url,
+                variants=len(result.variants),
+                from_cache=fetched.from_cache,
+                ok=True,
+            )
         except Exception as exc:
             self.metrics.failures += 1
             error = f"{type(exc).__name__}: {exc}"
@@ -427,6 +490,12 @@ class CatalogOrchestrator:
                 url=url,
                 category=candidate.category.name,
                 attempt=state.attempt_count,
+                error=error,
+            )
+            self.progress.product_done(
+                category=candidate.category.name,
+                url=url,
+                ok=False,
                 error=error,
             )
 

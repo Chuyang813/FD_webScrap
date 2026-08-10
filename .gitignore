@@ -7,5 +7,8 @@ __pycache__/
 # Fetched page bodies: large, regenerable, and not part of the deliverable.
 cache/pages/
 
+# Run logs are per-execution artifacts.
+logs/
+
 # data/catalog.db and output/* are intentionally tracked: the assignment asks for
 # a sample dataset and a database dump as deliverables.

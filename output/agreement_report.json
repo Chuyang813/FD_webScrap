@@ -1,23 +1,13 @@
 {
   "terminology": "cross-extractor agreement",
   "status": "skipped",
-  "reason": "missing configuration: LLM_PROVIDER, LLM_MODEL, LLM_API_KEY, LLM_BASE_URL",
-  "provider": null,
-  "model": null,
-  "sample_requested": 1,
+  "reason": "disabled by --no-llm",
+  "provider": "gemini",
+  "model": "gemini-3.6-flash",
+  "sample_requested": 2,
   "sample_size": 0,
   "overall_agreement": null,
   "field_agreement": {},
   "products": [],
-  "evidence": [
-    {
-      "status": "skipped",
-      "provider": null,
-      "model": null,
-      "request_sent": false,
-      "reason": "missing configuration: LLM_PROVIDER, LLM_MODEL, LLM_API_KEY, LLM_BASE_URL",
-      "context_characters": 0,
-      "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel"
-    }
-  ]
+  "evidence": []
 }

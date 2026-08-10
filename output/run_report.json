@@ -1,21 +1,21 @@
 {
-  "status": "completed",
+  "status": "failed",
   "metrics": {
     "categories_processed": 2,
     "urls_discovered": 154,
-    "products_extracted": 1,
-    "variants_extracted": 3,
+    "products_extracted": 0,
+    "variants_extracted": 0,
     "http_fetches": 0,
     "browser_fetches": 0,
-    "cache_hits": 15,
+    "cache_hits": 14,
     "retries": 0,
-    "failures": 0,
+    "failures": 4,
     "llm_shadow_runs": 0,
     "llm_fallback_runs": 0,
     "repair_suggestions": 0,
-    "duplicates_prevented": 1,
-    "started_at": "2026-08-10T17:24:50.316805+00:00",
-    "duration_seconds": 3.622
+    "duplicates_prevented": 0,
+    "started_at": "2026-08-10T19:10:44.067468+00:00",
+    "duration_seconds": 1.161
   },
   "robots": {
     "decision": "ALLOWED",
@@ -40,7 +40,7 @@
       "degraded_reason": null
     }
   },
-  "products_planned": 1,
+  "products_planned": 4,
   "database_snapshot": {
     "products": 7,
     "variants": 22,
@@ -81,19 +81,7 @@
     "overall_agreement": null
   },
   "recovery_records": [],
-  "extraction_audits": [
-    {
-      "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel",
-      "variants_extracted": 3,
-      "variants_complete": true,
-      "warnings": [],
-      "missing_expected_fields": [],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "embedded_state"
-      }
-    }
-  ],
+  "extraction_audits": [],
   "outputs": {
     "sqlite": "data\\catalog.db",
     "json": "output\\products.json",
