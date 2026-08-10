@@ -16,6 +16,53 @@ from utils.normalization import normalize_text
 
 
 AgreementMethod = Literal["normalized_exact", "numeric_tolerance", "set", "structured", "text_similarity"]
+AgreementTier = Literal["core", "advisory"]
+
+
+# Both extractors read the same explicit source for these, so a disagreement is a
+# real signal that one of them drifted. They set the headline score and threshold.
+CORE_FIELDS = frozenset(
+    {
+        "name",
+        "brand",
+        "product_url",
+        "description",
+        "image_urls",
+        "sku",
+        "price",
+        "currency",
+        "price_visibility",
+        "availability",
+    }
+)
+
+# Here a disagreement usually reflects representation, not fact. The
+# deterministic reader copies an authoritative structure while the LLM infers and
+# reshapes it: breadcrumb depth differs, option values get split into semantic
+# keys, identifier roles get confused, CDN URLs are not reproduced verbatim.
+# These stay visible but are excluded from the threshold, so they can neither
+# manufacture nor mask a drift alert.
+ADVISORY_FIELDS = frozenset(
+    {
+        "category_path",
+        "option_values",
+        "item_number",
+        "product_code",
+        "unit_pack_size",
+        "specifications",
+        "alternative_product_urls",
+        "variant_image_urls",
+    }
+)
+
+
+def _tier_of(field: str) -> AgreementTier:
+    return "core" if field in CORE_FIELDS else "advisory"
+
+
+def _mean_over(scores: dict[str, float], fields: frozenset[str]) -> float:
+    selected = [score for field, score in scores.items() if field in fields]
+    return fmean(selected) if selected else 1.0
 
 
 class FieldAgreement(BaseModel):
@@ -23,6 +70,7 @@ class FieldAgreement(BaseModel):
 
     field: str
     method: AgreementMethod
+    tier: AgreementTier
     agreed: bool
     score: float = Field(ge=0, le=1)
     deterministic_value: Any = None
@@ -34,7 +82,10 @@ class ProductAgreement(BaseModel):
 
     terminology: Literal["cross-extractor agreement"] = "cross-extractor agreement"
     product_url: str
+    #: Mean over core fields only. This is the value compared to the drift
+    #: threshold, because advisory fields disagree for benign reasons.
     overall_agreement: float = Field(ge=0, le=1)
+    advisory_agreement: float = Field(ge=0, le=1)
     field_agreement: dict[str, float]
     comparisons: list[FieldAgreement]
 
@@ -45,13 +96,30 @@ class CrossExtractorAgreementReport(BaseModel):
     terminology: Literal["cross-extractor agreement"] = "cross-extractor agreement"
     sample_size: int = Field(ge=0)
     overall_agreement: float = Field(ge=0, le=1)
+    advisory_agreement: float = Field(ge=0, le=1)
     field_agreement: dict[str, float]
+    core_fields: list[str] = Field(default_factory=list)
+    advisory_fields: list[str] = Field(default_factory=list)
     products: list[ProductAgreement] = Field(default_factory=list)
 
 
 def _text(value: Any) -> str | None:
     normalized = normalize_text(value)
     return normalized.casefold() if normalized else None
+
+
+def _label(value: Any) -> str | None:
+    """Compare status labels by content, ignoring punctuation and spacing.
+
+    Providers render the same fact as "In stock", "In Stock", and "InStock";
+    treating those as three different answers produces noise, not drift.
+    """
+
+    text = _text(value)
+    if text is None:
+        return None
+    reduced = "".join(character for character in text if character.isalnum())
+    return reduced or None
 
 
 def _variant_key(variant: ProductVariant, index: int) -> str:
@@ -89,6 +157,7 @@ class ExtractionComparator:
                 FieldAgreement(
                     field=field,
                     method=method,
+                    tier=_tier_of(field),
                     agreed=score >= threshold,
                     score=score,
                     deterministic_value=left,
@@ -143,8 +212,10 @@ class ExtractionComparator:
 
         variant_keys = set(left_variants) | set(right_variants)
         for field in ("currency", "unit_pack_size", "availability", "price_visibility"):
-            left = {key: _text(getattr(left_variants[key], field)) for key in left_variants}
-            right = {key: _text(getattr(right_variants[key], field)) for key in right_variants}
+            # Status labels differ only in punctuation across providers.
+            normalize = _label if field == "availability" else _text
+            left = {key: normalize(getattr(left_variants[key], field)) for key in left_variants}
+            right = {key: normalize(getattr(right_variants[key], field)) for key in right_variants}
             score = (
                 sum(
                     key in left and key in right and left[key] == right[key]
@@ -215,7 +286,8 @@ class ExtractionComparator:
         fields = {item.field: item.score for item in comparisons}
         return ProductAgreement(
             product_url=deterministic.product.product_url,
-            overall_agreement=fmean(fields.values()) if fields else 1.0,
+            overall_agreement=_mean_over(fields, CORE_FIELDS),
+            advisory_agreement=_mean_over(fields, ADVISORY_FIELDS),
             field_agreement=fields,
             comparisons=comparisons,
         )
@@ -232,8 +304,15 @@ class ExtractionComparator:
         }
         return CrossExtractorAgreementReport(
             sample_size=len(products),
-            overall_agreement=fmean(product.overall_agreement for product in products) if products else 1.0,
+            overall_agreement=(
+                fmean(product.overall_agreement for product in products) if products else 1.0
+            ),
+            advisory_agreement=(
+                fmean(product.advisory_agreement for product in products) if products else 1.0
+            ),
             field_agreement=fields,
+            core_fields=sorted(field for field in field_names if field in CORE_FIELDS),
+            advisory_fields=sorted(field for field in field_names if field in ADVISORY_FIELDS),
             products=products,
         )
 

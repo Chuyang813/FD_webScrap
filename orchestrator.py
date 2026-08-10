@@ -567,7 +567,12 @@ class CatalogOrchestrator:
             "model": self.llm_settings.model,
             "sample_requested": sample_limit,
             "sample_size": summary.sample_size,
+            # The headline value covers core fields only; advisory fields are
+            # reported separately because they disagree for benign reasons.
             "overall_agreement": summary.overall_agreement if summary.sample_size else None,
+            "advisory_agreement": summary.advisory_agreement if summary.sample_size else None,
+            "core_fields": summary.core_fields,
+            "advisory_fields": summary.advisory_fields,
             "field_agreement": summary.field_agreement,
             "products": [item.model_dump(mode="json") for item in summary.products],
             "evidence": self.shadow_evidence,
