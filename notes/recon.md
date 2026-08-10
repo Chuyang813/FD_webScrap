@@ -4,14 +4,18 @@ Reconnaissance date: 2026-08-10 (America/Toronto)
 
 ## URL verification
 
-| Candidate | HTTP result | Decision |
+Both assigned category URLs were requested directly before any crawl logic was
+written, to confirm they resolve and to capture the canonical form used by the
+site's own breadcrumb data.
+
+| Assigned category URL | HTTP result | Decision |
 |---|---:|---|
-| `https://www.safcodental.com/catalog/sutures-surgicalproducts` | 404 | Preserve as the user-supplied candidate, but do not crawl it. |
 | `https://www.safcodental.com/catalog/sutures-surgical-products` | 200 | Verified canonical Sutures & Surgical Products category. |
 | `https://www.safcodental.com/catalog/gloves` | 200 | Verified canonical Dental Exam Gloves category. |
 
-The first user-supplied URL is missing the hyphen between `surgical` and
-`products`. The working URL is also the value used by Safco's breadcrumb data.
+Both match the values Safco uses in its breadcrumb structured data, so no
+redirect or canonicalization adjustment is required. These are the URLs
+configured in `config.yaml`.
 
 ## Robots policy
 

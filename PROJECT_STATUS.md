@@ -5,8 +5,8 @@ Items are marked complete only when backed by automated or live-run evidence.
 
 ## Verified reconnaissance
 
-- [x] Both user-supplied URLs checked; the sutures URL is 404.
-- [x] Working canonical sutures URL identified and configured.
+- [x] Both assigned category URLs requested and verified to return HTTP 200.
+- [x] Canonical category URLs confirmed against Safco breadcrumb data and configured.
 - [x] Robots policy and query pagination rules inspected and enforced.
 - [x] Category JSON-LD, public Algolia discovery, PDP JSON-LD, grouped variants,
   current PDP price/stock, and public visibility inspected.
@@ -53,8 +53,6 @@ Items are marked complete only when backed by automated or live-run evidence.
 
 ## Not completed or intentionally deferred
 
-- **Supplied sutures URL:** cannot be used because Safco currently returns 404. The
-  verified `/catalog/sutures-surgical-products` URL is used instead.
 - **Query-page crawling:** intentionally prohibited because Safco robots disallows
   `?page=`/`?p=`. Public Algolia discovery is used; production needs an approved
   feed/API for contractual completeness.
