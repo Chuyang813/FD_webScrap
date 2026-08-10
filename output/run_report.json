@@ -1,0 +1,103 @@
+{
+  "status": "completed",
+  "metrics": {
+    "categories_processed": 2,
+    "urls_discovered": 154,
+    "products_extracted": 1,
+    "variants_extracted": 3,
+    "http_fetches": 0,
+    "browser_fetches": 0,
+    "cache_hits": 15,
+    "retries": 0,
+    "failures": 0,
+    "llm_shadow_runs": 0,
+    "llm_fallback_runs": 0,
+    "repair_suggestions": 0,
+    "duplicates_prevented": 1,
+    "started_at": "2026-08-10T17:24:50.316805+00:00",
+    "duration_seconds": 3.622
+  },
+  "robots": {
+    "decision": "ALLOWED",
+    "enforced": true,
+    "unknown_policy": "deny"
+  },
+  "discovery": {
+    "sutures_surgical": {
+      "url": "https://www.safcodental.com/catalog/sutures-surgical-products",
+      "status": "completed",
+      "method": "algolia",
+      "count": 56,
+      "reported_total_hits": 56,
+      "degraded_reason": null
+    },
+    "gloves": {
+      "url": "https://www.safcodental.com/catalog/gloves",
+      "status": "completed",
+      "method": "algolia",
+      "count": 98,
+      "reported_total_hits": 98,
+      "degraded_reason": null
+    }
+  },
+  "products_planned": 1,
+  "database_snapshot": {
+    "products": 7,
+    "variants": 22,
+    "product_completeness": {
+      "name": 1.0,
+      "brand": 1.0,
+      "category_path": 1.0,
+      "description": 1.0,
+      "specifications": 0.0,
+      "image_urls": 1.0,
+      "alternative_product_urls": 0.0,
+      "price_visibility": 1.0
+    },
+    "variant_completeness": {
+      "sku": 1.0,
+      "item_number": 1.0,
+      "price": 1.0,
+      "unit_pack_size": 0.8636,
+      "availability": 1.0,
+      "price_visibility": 1.0
+    },
+    "category_path_counts": {
+      "Dental Supplies > Sutures & surgical products > Surgical medicaments and packing": 3,
+      "Dental Supplies > Dental Exam Gloves > Nitrile gloves": 2,
+      "Dental Supplies > Dental Exam Gloves > Latex gloves": 1,
+      "Dental Supplies > Sutures & surgical products > Bone grafting tissue augmentation": 1
+    },
+    "field_provenance_counts": {
+      "derived": 77,
+      "embedded_state": 132,
+      "json_ld": 42,
+      "not_available": 14
+    }
+  },
+  "agreement": {
+    "status": "skipped",
+    "sample_size": 0,
+    "overall_agreement": null
+  },
+  "recovery_records": [],
+  "extraction_audits": [
+    {
+      "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel",
+      "variants_extracted": 3,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    }
+  ],
+  "outputs": {
+    "sqlite": "data\\catalog.db",
+    "json": "output\\products.json",
+    "csv": "output\\products.csv",
+    "agreement": "output\\agreement_report.json"
+  }
+}

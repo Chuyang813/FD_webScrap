@@ -1,0 +1,43 @@
+crawler:
+  max_retries: 3
+  max_products: null
+
+fetch:
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 30
+  user_agent: "FrontierDentalTakeHomeBot/0.1 (+local engineering assessment)"
+
+cache:
+  enabled: true
+  ttl_hours: 24
+  directory: "cache/pages"
+
+robots:
+  enforce: true
+  unknown_policy: "deny"
+
+rate_limit:
+  requests_per_second: 1
+  max_concurrency: 2
+  jitter_ms: 300
+
+categories:
+  - name: "sutures_surgical"
+    url: "https://www.safcodental.com/catalog/sutures-surgical-products"
+  - name: "gloves"
+    url: "https://www.safcodental.com/catalog/gloves"
+
+storage:
+  sqlite_path: "data/catalog.db"
+
+output:
+  json_path: "output/products.json"
+  csv_path: "output/products.csv"
+  agreement_path: "output/agreement_report.json"
+  run_report_path: "output/run_report.json"
+
+llm:
+  enabled: true
+  shadow_sample: 2
+  agreement_threshold: 0.80
+

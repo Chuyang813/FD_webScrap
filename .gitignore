@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Fetched page bodies: large, regenerable, and not part of the deliverable.
+cache/pages/
+
+# data/catalog.db and output/* are intentionally tracked: the assignment asks for
+# a sample dataset and a database dump as deliverables.

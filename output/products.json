@@ -1,0 +1,868 @@
+[
+  {
+    "name": "OraSoothe Sockit!",
+    "brand": "Septodont",
+    "category_path": [
+      "Dental Supplies",
+      "Sutures & surgical products",
+      "Surgical medicaments and packing"
+    ],
+    "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel",
+    "description": "Hydrogel dressing treats intraoral wounds and lesions. Provides fast, continuous pain relief without numbing. Protects from chemical and microbial contamination and promotes optimal healing.Contains no drugs, and has no toxicity or contraindications. Safe if swallowed. Individual 10g syringes are ideal for both in-office and take-home use. FDA approved. Please note: SOCKIT! Gel has changed its name. This product has transitioned to OraSoothe \"SOCKIT\" Gel. The product is the same - only the name has changed.",
+    "specifications": {},
+    "image_urls": [
+      "https://www.safcodental.com/media/catalog/product/p/f/pfpgh.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265"
+    ],
+    "alternative_product_urls": [],
+    "price_visibility": "public",
+    "field_provenance": {
+      "alternative_product_urls": "not_available",
+      "brand": "json_ld",
+      "category_path": "json_ld",
+      "content_hash": "derived",
+      "description": "json_ld",
+      "image_urls": "json_ld",
+      "name": "json_ld",
+      "price_visibility": "derived",
+      "product_url": "json_ld",
+      "specifications": "not_available"
+    },
+    "scraped_at": "2026-08-10T17:24:53.889500Z",
+    "content_hash": "a5c279e1534ba70db8916953f2b9699e946ee6d881cfc9c7a489076ffb66585e",
+    "variants": [
+      {
+        "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel",
+        "sku": "5106359",
+        "item_number": "01S0630",
+        "product_code": null,
+        "option_values": {
+          "description": "Oral Coating Rinse - Hygiene, 3.4 oz Bottle"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/s/e/septodont-orasoothe-oral-coating-rinse-hygiene-3-4-oz.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/s/e/septodont-orasoothe-oral-coating-rinse-hygiene-3-4-oz.jpg?canvas=700%2C700&fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "9.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": null,
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel",
+        "sku": "5690102",
+        "item_number": "01S0600",
+        "product_code": null,
+        "option_values": {
+          "description": "5-pack"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/p/f/pfpgh_1_1.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/p/f/pfpgh_1_1.jpg?canvas=700%2C700&fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "93.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": null,
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel",
+        "sku": "5690106",
+        "item_number": "01S0610",
+        "product_code": null,
+        "option_values": {
+          "description": "25-pack"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "309.490000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": null,
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Aurelia Amazing",
+    "brand": "Supermax",
+    "category_path": [
+      "Dental Supplies",
+      "Dental Exam Gloves",
+      "Nitrile gloves"
+    ],
+    "product_url": "https://www.safcodental.com/product/aurelia-reg-amazing-reg",
+    "description": "Powder-free nitrile exam gloves. Thinner and more flexible than standard nitrile. Textured fingertip finish Beaded cuff Chlorinated Ambidextrous Purple color Thickness: at palm 2.0 mils; at fingertips 3.0 mils 300 gloves per box (270 for x-large) Order 10 boxes to purchase a case",
+    "specifications": {},
+    "image_urls": [
+      "https://www.safcodental.com/media/catalog/product/d/r/drcbm.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265"
+    ],
+    "alternative_product_urls": [],
+    "price_visibility": "public",
+    "field_provenance": {
+      "alternative_product_urls": "not_available",
+      "brand": "json_ld",
+      "category_path": "json_ld",
+      "content_hash": "derived",
+      "description": "json_ld",
+      "image_urls": "json_ld",
+      "name": "json_ld",
+      "price_visibility": "derived",
+      "product_url": "json_ld",
+      "specifications": "not_available"
+    },
+    "scraped_at": "2026-08-10T17:17:05.523065Z",
+    "content_hash": "3d4b81be293e77ed3d6a08de3b5b84348e5e42f5ba0a8082973262f52230ea44",
+    "variants": [
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-amazing-reg",
+        "sku": "4871102",
+        "item_number": "92885",
+        "product_code": null,
+        "option_values": {
+          "description": "X-small, 300/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "20.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "300/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-amazing-reg",
+        "sku": "4871105",
+        "item_number": "92886",
+        "product_code": null,
+        "option_values": {
+          "description": "Small, 300/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "20.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "300/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-amazing-reg",
+        "sku": "4871108",
+        "item_number": "92887",
+        "product_code": null,
+        "option_values": {
+          "description": "Medium, 300/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "20.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "300/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-amazing-reg",
+        "sku": "4871111",
+        "item_number": "92888",
+        "product_code": null,
+        "option_values": {
+          "description": "Large, 300/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "20.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "300/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-amazing-reg",
+        "sku": "4871114",
+        "item_number": "92889",
+        "product_code": null,
+        "option_values": {
+          "description": "X-large, 270/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "20.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "270/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      }
+    ]
+  },
+  {
+    "name": "HemoStat",
+    "brand": "Medicom",
+    "category_path": [
+      "Dental Supplies",
+      "Sutures & surgical products",
+      "Surgical medicaments and packing"
+    ],
+    "product_url": "https://www.safcodental.com/product/hemostat-sup-trade-sup",
+    "description": "Topical hemostatic dressing in the form of a sterile fabric prepared by the chemical treatment of regenerated cellulose. Provides safe and effective control of bleeding for extractions and periodontal surgery. When the fabric comes into contact with blood or fluids, it expands and transforms to a clear, viscous gel which fills voids and seals capillary ends to help stop bleeding.",
+    "specifications": {},
+    "image_urls": [
+      "https://www.safcodental.com/media/catalog/product/m/e/medicom-hemostat-20-box.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265"
+    ],
+    "alternative_product_urls": [],
+    "price_visibility": "public",
+    "field_provenance": {
+      "alternative_product_urls": "not_available",
+      "brand": "json_ld",
+      "category_path": "json_ld",
+      "content_hash": "derived",
+      "description": "json_ld",
+      "image_urls": "json_ld",
+      "name": "json_ld",
+      "price_visibility": "derived",
+      "product_url": "json_ld",
+      "specifications": "not_available"
+    },
+    "scraped_at": "2026-08-10T17:17:06.669418Z",
+    "content_hash": "edf92acf2bbcae3acb25a5454cac4206bb0bf8cffd1bea06b59d36a3a8681dc0",
+    "variants": [
+      {
+        "product_url": "https://www.safcodental.com/product/hemostat-sup-trade-sup",
+        "sku": "3152001",
+        "item_number": "4900-STAT",
+        "product_code": null,
+        "option_values": {
+          "description": "Box of 20"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/m/e/medicom-hemostat-20-box_1.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/m/e/medicom-hemostat-20-box_1.jpg?canvas=700%2C700&fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "125.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "20/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Aurelia Vibrant",
+    "brand": "Supermax",
+    "category_path": [
+      "Dental Supplies",
+      "Dental Exam Gloves",
+      "Latex gloves"
+    ],
+    "product_url": "https://www.safcodental.com/product/aurelia-reg-vibrant-trade",
+    "description": "Powder-free latex exam gloves. Micro-textured finish Beaded cuff Chlorinated Ambidextrous 50μg or less of latex protein Natural color 100 gloves per box Order 10 boxes to purchase a case",
+    "specifications": {},
+    "image_urls": [
+      "https://www.safcodental.com/media/catalog/product/d/r/drbas.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265"
+    ],
+    "alternative_product_urls": [],
+    "price_visibility": "public",
+    "field_provenance": {
+      "alternative_product_urls": "not_available",
+      "brand": "json_ld",
+      "category_path": "json_ld",
+      "content_hash": "derived",
+      "description": "json_ld",
+      "image_urls": "json_ld",
+      "name": "json_ld",
+      "price_visibility": "derived",
+      "product_url": "json_ld",
+      "specifications": "not_available"
+    },
+    "scraped_at": "2026-08-10T17:17:07.795573Z",
+    "content_hash": "104bf0261d0da12c5a6f87bb28d38d2d621935914d16b45c3260013f05487531",
+    "variants": [
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-vibrant-trade",
+        "sku": "4870322",
+        "item_number": "98225",
+        "product_code": null,
+        "option_values": {
+          "description": "x-small, 100/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "7.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-vibrant-trade",
+        "sku": "4870334",
+        "item_number": "98226",
+        "product_code": null,
+        "option_values": {
+          "description": "small, 100/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "7.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-vibrant-trade",
+        "sku": "4870345",
+        "item_number": "98227",
+        "product_code": null,
+        "option_values": {
+          "description": "medium, 100/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "7.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/aurelia-reg-vibrant-trade",
+        "sku": "4870357",
+        "item_number": "98228",
+        "product_code": null,
+        "option_values": {
+          "description": "large, 100/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "7.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Surgifoam",
+    "brand": "Ethicon",
+    "category_path": [
+      "Dental Supplies",
+      "Sutures & surgical products",
+      "Surgical medicaments and packing"
+    ],
+    "product_url": "https://www.safcodental.com/product/surgifoam-reg",
+    "description": "Sterile, water insoluble, malleable porcine gelatin absorbable sponge, intended for hemostatic use by applying to a bleeding surface.",
+    "specifications": {},
+    "image_urls": [
+      "https://www.safcodental.com/media/catalog/product/p/f/pfpjk.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265"
+    ],
+    "alternative_product_urls": [],
+    "price_visibility": "public",
+    "field_provenance": {
+      "alternative_product_urls": "not_available",
+      "brand": "json_ld",
+      "category_path": "json_ld",
+      "content_hash": "derived",
+      "description": "json_ld",
+      "image_urls": "json_ld",
+      "name": "json_ld",
+      "price_visibility": "derived",
+      "product_url": "json_ld",
+      "specifications": "not_available"
+    },
+    "scraped_at": "2026-08-10T17:17:08.945037Z",
+    "content_hash": "17d029034e8244f6f005fe29f5f7d85357b44d77bbcea56e9418d0c5f11e08be",
+    "variants": [
+      {
+        "product_url": "https://www.safcodental.com/product/surgifoam-reg",
+        "sku": "2580512",
+        "item_number": "1972",
+        "product_code": null,
+        "option_values": {
+          "description": "2cm x 6cm x 0.7cm, 12/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "214.490000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "12/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/surgifoam-reg",
+        "sku": "2580524",
+        "item_number": "1969",
+        "product_code": null,
+        "option_values": {
+          "description": "1cm x 1cm x 1cm, 24/box"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "251.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "24/box",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Regenafill Bone Graft Plug",
+    "brand": "Surgical Esthetics",
+    "category_path": [
+      "Dental Supplies",
+      "Sutures & surgical products",
+      "Bone grafting tissue augmentation"
+    ],
+    "product_url": "https://www.safcodental.com/product/regenafill-sup-trade-sup-bone-graft-plug",
+    "description": "Composed of 80% carbonate phosphate based mineral with a carbonate apatite structure combined with 20% Type I Achilles bovine tendon collagen. This mineral is physically and chemically comparable to the mineralized matrix of human bone, which makes it an excellent choice for socket preservation. No membrane needed in most cases. Intended for use in dental surgery including: • Augmentation or reconstructive treatment of the alveolar ridge.• Filling of infrabony periodontal defects.• Filling of defects after root resection, apicoectomy, and cystectomy.• Filling of extraction sockets to enhance preservation of alveolar ridge.• Elevation of the maxillary sinus floor.• Filling of periodontal defects in conjunction with GTR. • Filling of peri-implant defects in conjunction with GBR.",
+    "specifications": {},
+    "image_urls": [
+      "https://www.safcodental.com/media/catalog/product/p/f/pfwrl.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265"
+    ],
+    "alternative_product_urls": [],
+    "price_visibility": "public",
+    "field_provenance": {
+      "alternative_product_urls": "not_available",
+      "brand": "json_ld",
+      "category_path": "json_ld",
+      "content_hash": "derived",
+      "description": "json_ld",
+      "image_urls": "json_ld",
+      "name": "json_ld",
+      "price_visibility": "derived",
+      "product_url": "json_ld",
+      "specifications": "not_available"
+    },
+    "scraped_at": "2026-08-10T17:17:20.579168Z",
+    "content_hash": "3e0cd93b4d8841354017ef6aed26008e81feeed1cc3ce98c601bc9af1c782e5a",
+    "variants": [
+      {
+        "product_url": "https://www.safcodental.com/product/regenafill-sup-trade-sup-bone-graft-plug",
+        "sku": "6130070",
+        "item_number": "RFP10X20",
+        "product_code": null,
+        "option_values": {
+          "description": "Posterior 10mm x 20mm, 5/pack"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "259.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "5/pack",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/regenafill-sup-trade-sup-bone-graft-plug",
+        "sku": "6130072",
+        "item_number": "RFP6X25",
+        "product_code": null,
+        "option_values": {
+          "description": "Anterior 6mm x 25mm, 5/pack"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "259.990000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "5/pack",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Compac Nitrile Gloves",
+    "brand": "Cranberry",
+    "category_path": [
+      "Dental Supplies",
+      "Dental Exam Gloves",
+      "Nitrile gloves"
+    ],
+    "product_url": "https://www.safcodental.com/product/compac-nitrile",
+    "description": "Compac™ By The Cuff® Nitrile Powder Free Exam Gloves feature innovative dispensing technology designed to reduce cross-contamination, minimize glove waste, and improve operatory efficiency.",
+    "specifications": {},
+    "image_urls": [
+      "https://www.safcodental.com/media/catalog/product/c/r/cranberry-compac-nitrile-front-facing-100-box_1.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265"
+    ],
+    "alternative_product_urls": [],
+    "price_visibility": "public",
+    "field_provenance": {
+      "alternative_product_urls": "not_available",
+      "brand": "json_ld",
+      "category_path": "json_ld",
+      "content_hash": "derived",
+      "description": "json_ld",
+      "image_urls": "json_ld",
+      "name": "json_ld",
+      "price_visibility": "derived",
+      "product_url": "json_ld",
+      "specifications": "not_available"
+    },
+    "scraped_at": "2026-08-10T17:17:21.946823Z",
+    "content_hash": "2e289a97bc347200f922dd863ae871e01810221b28ed3840cd9be23234f6d9b1",
+    "variants": [
+      {
+        "product_url": "https://www.safcodental.com/product/compac-nitrile",
+        "sku": "4710150",
+        "item_number": "CR3905",
+        "product_code": null,
+        "option_values": {
+          "description": "X-small, 100/bag"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "8.490000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/bag",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/compac-nitrile",
+        "sku": "4710152",
+        "item_number": "CR3906",
+        "product_code": null,
+        "option_values": {
+          "description": "Small, 100/bag"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "8.490000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/bag",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/compac-nitrile",
+        "sku": "4710154",
+        "item_number": "CR3907",
+        "product_code": null,
+        "option_values": {
+          "description": "Medium, 100/bag"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/c/o/compac-nitrile-exam-gloves-100-bag-box.jpg?canvas=265%2C265&fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/c/o/compac-nitrile-exam-gloves-100-bag-box.jpg?canvas=700%2C700&fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "8.490000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/bag",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/compac-nitrile",
+        "sku": "4710156",
+        "item_number": "CR3908",
+        "product_code": null,
+        "option_values": {
+          "description": "Large, 100/bag"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "8.490000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/bag",
+        "availability": "Backorder",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      },
+      {
+        "product_url": "https://www.safcodental.com/product/compac-nitrile",
+        "sku": "4710158",
+        "item_number": "CR3909",
+        "product_code": null,
+        "option_values": {
+          "description": "X-large, 100/bag"
+        },
+        "image_urls": [
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=265&optimize=medium&width=265",
+          "https://www.safcodental.com/media/catalog/product/placeholder/default/white-placeholder_4.jpg?fit=bounds&height=700&optimize=medium&width=700"
+        ],
+        "price": "8.490000",
+        "currency": "USD",
+        "price_visibility": "public",
+        "unit_pack_size": "100/bag",
+        "availability": "In stock",
+        "field_provenance": {
+          "availability": "embedded_state",
+          "image_urls": "embedded_state",
+          "item_number": "embedded_state",
+          "option_values": "embedded_state",
+          "price": "embedded_state",
+          "price_visibility": "derived",
+          "product_url": "derived",
+          "sku": "embedded_state",
+          "unit_pack_size": "derived"
+        }
+      }
+    ]
+  }
+]
