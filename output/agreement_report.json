@@ -2,6 +2,7 @@
   "terminology": "cross-extractor agreement",
   "status": "partial",
   "reason": "one or more shadow samples failed",
+  "generated_at": "2026-08-10T20:43:33.260487+00:00",
   "provider": "gemini",
   "model": "gemini-3-flash-preview",
   "sample_requested": 14,

@@ -786,9 +786,18 @@ class CatalogOrchestrator:
             "products_planned": self.products_planned,
             "database_snapshot": self._quality_summary(snapshot),
             "agreement": {
-                "status": agreement["status"],
-                "sample_size": agreement["sample_size"],
-                "overall_agreement": agreement["overall_agreement"],
+                key: agreement[key]
+                for key in (
+                    "status",
+                    "reason",
+                    "sample_size",
+                    "overall_agreement",
+                    "advisory_agreement",
+                    # Present when this run sampled nothing and an earlier report
+                    # was kept, so "preserved" says what it preserved.
+                    "preserved_report",
+                )
+                if key in agreement
             },
             "recovery_records": self.recovery_records,
             "repair_diagnoses": self.repair_diagnoses,
