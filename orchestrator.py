@@ -610,6 +610,7 @@ class CatalogOrchestrator:
                 "json": str(self.config.output.json_path),
                 "csv": str(self.config.output.csv_path),
                 "agreement": str(self.config.output.agreement_path),
+                "run_report": str(self.config.output.run_report_path),
             },
         }
         self._write_json(self.config.output.run_report_path, report)

@@ -59,6 +59,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--log-path",
         help="write JSON events to this file instead of stderr",
     )
+    parser.add_argument(
+        "--print-report",
+        action="store_true",
+        help="print the full run report JSON to stdout even in interactive runs",
+    )
     return parser
 
 
@@ -90,7 +95,13 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:
         print(f"fatal: {type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
-    print(json.dumps(report, ensure_ascii=False, indent=2, default=str))
+    # An interactive run already showed its summary live; dumping the full report
+    # would bury it. Redirected output keeps emitting JSON so pipes still work.
+    interactive = args.progress if args.progress is not None else sys.stderr.isatty()
+    if args.print_report or not interactive:
+        print(json.dumps(report, ensure_ascii=False, indent=2, default=str))
+    else:
+        print(f"run report: {report.get('outputs', {}).get('run_report', 'output/run_report.json')}")
     if report.get("status") == "completed":
         return 0
     return 2 if report.get("status") == "partial" else 1
