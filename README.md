@@ -215,6 +215,18 @@ is reported as `skipped` with the missing variable names, and the crawl complete
 normally. Secrets are read only from the environment and are never written to
 cache metadata or reports.
 
+Any compatible provider works. Gemini was used for the results below, through
+Google's OpenAI-compatible endpoint
+(`https://generativelanguage.googleapis.com/v1beta/openai`), which accepted the
+generated JSON Schema unchanged.
+
+**Provider quota.** Free tiers are small — Gemini's allows roughly 5 requests per
+minute and 20 per day per model. `config.yaml` therefore defaults
+`llm.shadow_sample` to 2. The adapter paces requests to
+`llm.requests_per_minute`, retries 429 with backoff honouring `Retry-After`, and
+stops sampling for the rest of the run once a quota is exhausted rather than
+spending attempts that cannot succeed.
+
 ### Commands
 
 ```bash

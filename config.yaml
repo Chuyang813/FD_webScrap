@@ -38,6 +38,10 @@ output:
 
 llm:
   enabled: true
+  # Free provider tiers are typically capped near 20 requests per day, so the
+  # default sample stays small. Raise it deliberately when quota allows.
   shadow_sample: 2
   agreement_threshold: 0.80
+  requests_per_minute: 5
+  max_retries: 2
 

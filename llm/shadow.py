@@ -13,7 +13,11 @@ from extraction.jsonld import parse_json_ld
 from extraction.master_data import MasterDataDecodeError, decode_master_data
 from models import ExtractionResult, FieldSource
 
-from .openai_compatible import LLMSettings, OpenAICompatibleAdapter
+from .openai_compatible import (
+    LLMQuotaExhaustedError,
+    LLMSettings,
+    OpenAICompatibleAdapter,
+)
 
 
 class ShadowEvidence(BaseModel):
@@ -94,11 +98,18 @@ class ShadowLLMExtractor:
         adapter: OpenAICompatibleAdapter | None = None,
         validator: ValidatorAgent | None = None,
         max_context_characters: int = 50_000,
+        requests_per_minute: float = 5,
+        max_retries: int = 2,
     ) -> None:
         self.settings = settings or LLMSettings.from_env()
-        self.adapter = adapter or OpenAICompatibleAdapter(self.settings)
+        self.adapter = adapter or OpenAICompatibleAdapter(
+            self.settings,
+            requests_per_minute=requests_per_minute,
+            max_retries=max_retries,
+        )
         self.validator = validator or ValidatorAgent()
         self.max_context_characters = max_context_characters
+        self.quota_exhausted = False
 
     async def extract(self, html: str, url: str) -> ShadowEvidence:
         if not self.settings.configured:
@@ -108,6 +119,15 @@ class ShadowLLMExtractor:
                 model=self.settings.model,
                 request_sent=False,
                 reason="missing configuration: " + ", ".join(self.settings.missing_configuration),
+            )
+        if self.quota_exhausted:
+            # Spending more attempts cannot succeed and only produces noise.
+            return ShadowEvidence(
+                status="skipped",
+                provider=self.settings.provider,
+                model=self.settings.model,
+                request_sent=False,
+                reason="provider quota exhausted earlier in this run",
             )
         context = build_shadow_context(
             html,
@@ -134,6 +154,16 @@ class ShadowLLMExtractor:
                 request_sent=True,
                 context_characters=len(context),
                 result=validation.result,
+            )
+        except LLMQuotaExhaustedError as exc:
+            self.quota_exhausted = True
+            return ShadowEvidence(
+                status="failed",
+                provider=self.settings.provider,
+                model=self.settings.model,
+                request_sent=True,
+                reason=str(exc),
+                context_characters=len(context),
             )
         except Exception as exc:  # Provider failures are evidence, never crawl failures.
             return ShadowEvidence(

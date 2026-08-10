@@ -83,7 +83,11 @@ class CatalogOrchestrator:
         self.comparator = ExtractionComparator()
 
         self.llm_settings = LLMSettings.from_env()
-        self.shadow_extractor = ShadowLLMExtractor(self.llm_settings)
+        self.shadow_extractor = ShadowLLMExtractor(
+            self.llm_settings,
+            requests_per_minute=config.llm.requests_per_minute,
+            max_retries=config.llm.max_retries,
+        )
         self.shadow_pairs: list[tuple[ExtractionResult, ExtractionResult]] = []
         self.shadow_evidence: list[dict[str, Any]] = []
         self.recovery_records: list[dict[str, Any]] = []

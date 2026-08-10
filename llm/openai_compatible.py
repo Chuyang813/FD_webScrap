@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
-from collections.abc import Mapping
+import time
+from collections.abc import Awaitable, Callable, Mapping
 from typing import Any
 
 import httpx
@@ -59,6 +61,14 @@ class LLMSettings(BaseModel):
         return not self.missing_configuration
 
 
+class LLMQuotaExhaustedError(RuntimeError):
+    """The provider kept returning 429 after the configured retries.
+
+    Raised so the caller can stop sampling for the rest of the run instead of
+    spending further attempts against a limit that will not clear in time.
+    """
+
+
 class OpenAICompatibleAdapter:
     """Call ``chat/completions`` with strict JSON Schema and Pydantic validation."""
 
@@ -67,9 +77,35 @@ class OpenAICompatibleAdapter:
         settings: LLMSettings,
         *,
         transport: httpx.AsyncBaseTransport | None = None,
+        requests_per_minute: float = 5,
+        max_retries: int = 2,
+        sleep: Callable[[float], Awaitable[None]] | None = None,
     ) -> None:
         self.settings = settings
         self._transport = transport
+        self.min_interval = 60.0 / requests_per_minute if requests_per_minute > 0 else 0.0
+        self.max_retries = max_retries
+        self._sleep = sleep or asyncio.sleep
+        self._last_call_at: float | None = None
+
+    async def _respect_rate_limit(self) -> None:
+        """Free provider tiers cap requests per minute; pace calls to stay under."""
+
+        if self.min_interval <= 0 or self._last_call_at is None:
+            return
+        elapsed = time.monotonic() - self._last_call_at
+        if elapsed < self.min_interval:
+            await self._sleep(self.min_interval - elapsed)
+
+    @staticmethod
+    def _retry_delay(response: httpx.Response, attempt: int) -> float:
+        header = response.headers.get("Retry-After")
+        if header:
+            try:
+                return max(0.0, float(header))
+            except ValueError:
+                pass
+        return float(2**attempt)
 
     def request_payload(self, *, context: str) -> dict[str, Any]:
         schema = ExtractionResult.model_json_schema()
@@ -104,11 +140,23 @@ class OpenAICompatibleAdapter:
             "Authorization": f"Bearer {self.settings.api_key}",
             "Content-Type": "application/json",
         }
+        payload_body = self.request_payload(context=context)
         async with httpx.AsyncClient(
             timeout=self.settings.timeout_seconds,
             transport=self._transport,
         ) as client:
-            response = await client.post(endpoint, headers=headers, json=self.request_payload(context=context))
+            for attempt in range(self.max_retries + 1):
+                await self._respect_rate_limit()
+                self._last_call_at = time.monotonic()
+                response = await client.post(endpoint, headers=headers, json=payload_body)
+                if response.status_code != 429:
+                    break
+                if attempt == self.max_retries:
+                    raise LLMQuotaExhaustedError(
+                        f"provider returned 429 after {self.max_retries + 1} attempts; "
+                        "the request or daily quota is exhausted"
+                    )
+                await self._sleep(self._retry_delay(response, attempt))
             response.raise_for_status()
         payload = response.json()
         try:

@@ -54,6 +54,9 @@ class LLMConfig(BaseModel):
     enabled: bool = True
     shadow_sample: int = 2
     agreement_threshold: float = Field(default=0.8, ge=0, le=1)
+    # Free provider tiers are commonly capped near five requests per minute.
+    requests_per_minute: float = Field(default=5, gt=0)
+    max_retries: int = Field(default=2, ge=0)
 
 
 class AppConfig(BaseModel):
