@@ -1,21 +1,21 @@
 {
-  "status": "partial",
+  "status": "completed",
   "metrics": {
     "categories_processed": 2,
     "urls_discovered": 154,
-    "products_extracted": 139,
-    "variants_extracted": 730,
-    "http_fetches": 147,
+    "products_extracted": 154,
+    "variants_extracted": 760,
+    "http_fetches": 0,
     "browser_fetches": 0,
-    "cache_hits": 14,
+    "cache_hits": 168,
     "retries": 0,
-    "failures": 8,
-    "llm_shadow_runs": 20,
+    "failures": 0,
+    "llm_shadow_runs": 14,
     "llm_fallback_runs": 0,
     "repair_suggestions": 0,
-    "duplicates_prevented": 0,
-    "started_at": "2026-08-10T19:48:24.634624+00:00",
-    "duration_seconds": 560.218
+    "duplicates_prevented": 154,
+    "started_at": "2026-08-10T20:31:31.192432+00:00",
+    "duration_seconds": 322.754
   },
   "robots": {
     "decision": "ALLOWED",
@@ -40,7 +40,7 @@
       "degraded_reason": null
     }
   },
-  "products_planned": 147,
+  "products_planned": 154,
   "database_snapshot": {
     "products": 154,
     "variants": 760,
@@ -88,221 +88,22 @@
   },
   "agreement": {
     "status": "partial",
-    "sample_size": 19,
-    "overall_agreement": 0.7598396302007719
+    "sample_size": 12,
+    "overall_agreement": 0.9970216614037725
   },
   "recovery_records": [
-    {
-      "product_url": "https://www.safcodental.com/product/alasta-pro",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.750 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:48:55.139912Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/aquasoft",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.750 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:49:30.605360Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/beesure-reg-superslim-trade-nitrile",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.750 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:50:03.647136Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/ossif-i-sem-trade",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.750 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:50:35.432005Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/microflex-sup-reg-sup-ultraform-sup-trade-sup",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.701 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:50:50.616229Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/foundation-trade",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.750 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:51:10.820443Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/collashield-trade-collagen-membrane",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.694 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:51:45.532004Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/lavender-nitrile",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.694 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:52:00.174700Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/alasta-sup-reg-sup",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.750 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:52:28.804296Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/safco-nitrilex-black",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.750 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:53:01.388084Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/perma-sharp-reg-sutures",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.443 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:53:25.314170Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/safco-surestitch-trade-sutures",
-      "triggers": [
-        {
-          "kind": "agreement_drop",
-          "detail": "cross-extractor agreement 0.626 below 0.800"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:53:50.438966Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/r-t-r-membrane",
-      "triggers": [
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:54:23.136053Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/helimend-trade-and-helimend-trade-advanced",
-      "triggers": [
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:54:30.005425Z"
-    },
     {
       "product_url": "https://www.safcodental.com/product/micro-touch-reg-nitrafree-trade-pink",
       "triggers": [
         {
           "kind": "missing_field",
           "detail": "category_path"
-        },
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
         }
       ],
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:55:56.617942Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/contour-reg",
-      "triggers": [
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:56:37.037547Z"
+      "recorded_at": "2026-08-10T20:36:17.414530Z"
     },
     {
       "product_url": "https://www.safcodental.com/product/alasta-sup-reg-sup-white",
@@ -310,29 +111,12 @@
         {
           "kind": "missing_field",
           "detail": "category_path"
-        },
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
         }
       ],
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:57:15.553692Z"
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/polymed-reg",
-      "triggers": [
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
-        }
-      ],
-      "suggestions": [],
-      "disposition": "recorded_for_review",
-      "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:57:30.893658Z"
+      "recorded_at": "2026-08-10T20:36:42.833379Z"
     },
     {
       "product_url": "https://www.safcodental.com/product/microflex-reg-comfortgrip-trade",
@@ -340,16 +124,12 @@
         {
           "kind": "missing_field",
           "detail": "category_path"
-        },
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
         }
       ],
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:57:36.722747Z"
+      "recorded_at": "2026-08-10T20:36:50.598967Z"
     },
     {
       "product_url": "https://www.safcodental.com/product/micropro-textured",
@@ -357,19 +137,103 @@
         {
           "kind": "missing_field",
           "detail": "category_path"
-        },
-        {
-          "kind": "missing_field",
-          "detail": "variants_complete"
         }
       ],
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T19:57:40.155736Z"
+      "recorded_at": "2026-08-10T20:36:51.853112Z"
     }
   ],
   "extraction_audits": [
+    {
+      "product_url": "https://www.safcodental.com/product/orasoothe-reg-sockit-gel",
+      "variants_extracted": 3,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/aurelia-reg-amazing-reg",
+      "variants_extracted": 5,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/hemostat-sup-trade-sup",
+      "variants_extracted": 1,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/aurelia-reg-vibrant-trade",
+      "variants_extracted": 4,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/surgifoam-reg",
+      "variants_extracted": 2,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/compac-nitrile",
+      "variants_extracted": 5,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/regenafill-sup-trade-sup-bone-graft-plug",
+      "variants_extracted": 2,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/alasta-pro",
+      "variants_extracted": 5,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
     {
       "product_url": "https://www.safcodental.com/product/ossify-sup-reg-sup-cortical-bone-sheet",
       "variants_extracted": 2,
@@ -382,7 +246,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/alasta-pro",
+      "product_url": "https://www.safcodental.com/product/aquasoft",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -404,8 +268,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/aquasoft",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/beesure-reg-superslim-trade-nitrile",
+      "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -426,8 +290,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/beesure-reg-superslim-trade-nitrile",
-      "variants_extracted": 4,
+      "product_url": "https://www.safcodental.com/product/microflex-sup-reg-sup-ultraform-sup-trade-sup",
+      "variants_extracted": 8,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -448,28 +312,6 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/microflex-sup-reg-sup-ultraform-sup-trade-sup",
-      "variants_extracted": 8,
-      "variants_complete": true,
-      "warnings": [],
-      "missing_expected_fields": [],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "embedded_state"
-      }
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/foundation-trade",
-      "variants_extracted": 3,
-      "variants_complete": true,
-      "warnings": [],
-      "missing_expected_fields": [],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "embedded_state"
-      }
-    },
-    {
       "product_url": "https://www.safcodental.com/product/alasta-reg-aloe",
       "variants_extracted": 4,
       "variants_complete": true,
@@ -481,7 +323,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/collashield-trade-collagen-membrane",
+      "product_url": "https://www.safcodental.com/product/foundation-trade",
       "variants_extracted": 3,
       "variants_complete": true,
       "warnings": [],
@@ -503,8 +345,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/soft-tissue-trimmer",
-      "variants_extracted": 2,
+      "product_url": "https://www.safcodental.com/product/collashield-trade-collagen-membrane",
+      "variants_extracted": 3,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -525,6 +367,28 @@
       }
     },
     {
+      "product_url": "https://www.safcodental.com/product/soft-tissue-trimmer",
+      "variants_extracted": 2,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/safco-nitrilex-black",
+      "variants_extracted": 5,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
       "product_url": "https://www.safcodental.com/product/feather-sup-reg-nbsp-sup-microsurgical-blades",
       "variants_extracted": 4,
       "variants_complete": true,
@@ -536,7 +400,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/safco-nitrilex-black",
+      "product_url": "https://www.safcodental.com/product/safco-nitrilex-surpass-trade",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -558,8 +422,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/safco-nitrilex-surpass-trade",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/revosoft-reg-nitrile-gloves",
+      "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -580,7 +444,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/revosoft-reg-nitrile-gloves",
+      "product_url": "https://www.safcodental.com/product/crave-trade",
       "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
@@ -602,8 +466,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/crave-trade",
-      "variants_extracted": 4,
+      "product_url": "https://www.safcodental.com/product/aqua-source-reg",
+      "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -624,7 +488,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/aqua-source-reg",
+      "product_url": "https://www.safcodental.com/product/xlim-reg",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -646,7 +510,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/xlim-reg",
+      "product_url": "https://www.safcodental.com/product/halyard-black-nitrile",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -668,8 +532,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/halyard-black-nitrile",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/ocean-pacific-sup-reg-sup-neonatural-sup-trade-sup",
+      "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -690,8 +554,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/ocean-pacific-sup-reg-sup-neonatural-sup-trade-sup",
-      "variants_extracted": 1,
+      "product_url": "https://www.safcodental.com/product/true-comfort-reg-blu",
+      "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -712,7 +576,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/true-comfort-reg-blu",
+      "product_url": "https://www.safcodental.com/product/aquaprene-reg",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -734,7 +598,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/aquaprene-reg",
+      "product_url": "https://www.safcodental.com/product/black-maxx-sup-reg-sup",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -756,7 +620,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/black-maxx-sup-reg-sup",
+      "product_url": "https://www.safcodental.com/product/gloveup-sup-reg-sup",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -769,22 +633,17 @@
     {
       "product_url": "https://www.safcodental.com/product/r-t-r-membrane",
       "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
-      "missing_expected_fields": [
-        "variants_complete"
-      ],
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_fallback"
+        "variants": "json_ld_single_item"
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/gloveup-sup-reg-sup",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/beesure-ultraslim-nitrile",
+      "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -805,8 +664,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/beesure-ultraslim-nitrile",
-      "variants_extracted": 4,
+      "product_url": "https://www.safcodental.com/product/aurelia-reg-bold-reg",
+      "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -818,21 +677,16 @@
     {
       "product_url": "https://www.safcodental.com/product/helimend-trade-and-helimend-trade-advanced",
       "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
-      "missing_expected_fields": [
-        "variants_complete"
-      ],
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_fallback"
+        "variants": "json_ld_single_item"
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/aurelia-reg-bold-reg",
+      "product_url": "https://www.safcodental.com/product/aurelia-reg-sonic-reg-100",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -854,7 +708,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/aurelia-reg-sonic-reg-100",
+      "product_url": "https://www.safcodental.com/product/aurelia-reg-absolute-trade",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -876,7 +730,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/aurelia-reg-absolute-trade",
+      "product_url": "https://www.safcodental.com/product/carbon-reg-nitrile",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -898,7 +752,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/carbon-reg-nitrile",
+      "product_url": "https://www.safcodental.com/product/aurelia-sup-reg-sup-sonic-sup-reg-sup",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -920,28 +774,6 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/aurelia-sup-reg-sup-sonic-sup-reg-sup",
-      "variants_extracted": 5,
-      "variants_complete": true,
-      "warnings": [],
-      "missing_expected_fields": [],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "embedded_state"
-      }
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/coe-pak-trade-automix-nds",
-      "variants_extracted": 2,
-      "variants_complete": true,
-      "warnings": [],
-      "missing_expected_fields": [],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "embedded_state"
-      }
-    },
-    {
       "product_url": "https://www.safcodental.com/product/aurelia-reg-blush-reg",
       "variants_extracted": 4,
       "variants_complete": true,
@@ -953,7 +785,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/coe-pak-trade",
+      "product_url": "https://www.safcodental.com/product/coe-pak-trade-automix-nds",
       "variants_extracted": 2,
       "variants_complete": true,
       "warnings": [],
@@ -975,8 +807,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/barricaid-reg",
-      "variants_extracted": 1,
+      "product_url": "https://www.safcodental.com/product/coe-pak-trade",
+      "variants_extracted": 2,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -997,7 +829,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/surgicel-reg",
+      "product_url": "https://www.safcodental.com/product/barricaid-reg",
       "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
@@ -1019,8 +851,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/orca-sup-trade-sup-foam",
-      "variants_extracted": 2,
+      "product_url": "https://www.safcodental.com/product/surgicel-reg",
+      "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1041,7 +873,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/periacryl-reg-90",
+      "product_url": "https://www.safcodental.com/product/orca-sup-trade-sup-foam",
       "variants_extracted": 2,
       "variants_complete": true,
       "warnings": [],
@@ -1063,8 +895,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/orca-trade-dry-socket",
-      "variants_extracted": 1,
+      "product_url": "https://www.safcodental.com/product/periacryl-reg-90",
+      "variants_extracted": 2,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1085,7 +917,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/helitape-reg",
+      "product_url": "https://www.safcodental.com/product/orca-trade-dry-socket",
       "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
@@ -1107,7 +939,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/integra-sup-reg-sup-miltex-sup-reg-sup-helicote-sup-reg-sup",
+      "product_url": "https://www.safcodental.com/product/helitape-reg",
       "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
@@ -1129,7 +961,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/actcel",
+      "product_url": "https://www.safcodental.com/product/integra-sup-reg-sup-miltex-sup-reg-sup-helicote-sup-reg-sup",
       "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
@@ -1151,6 +983,28 @@
       }
     },
     {
+      "product_url": "https://www.safcodental.com/product/actcel",
+      "variants_extracted": 1,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/safco-nitrilex-reg-ultrasoft-nitrile-gloves",
+      "variants_extracted": 5,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
       "product_url": "https://www.safcodental.com/product/myco-medical-technocut-reg-disposable-scalpels",
       "variants_extracted": 5,
       "variants_complete": true,
@@ -1162,7 +1016,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/safco-nitrilex-reg-ultrasoft-nitrile-gloves",
+      "product_url": "https://www.safcodental.com/product/safco-nitrilex-reg-nitrile-gloves",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -1184,7 +1038,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/safco-nitrilex-reg-nitrile-gloves",
+      "product_url": "https://www.safcodental.com/product/safco-durasoft-trade-latex-gloves",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -1206,8 +1060,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/safco-durasoft-trade-latex-gloves",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/beesure-reg-neogrene-trade",
+      "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1228,8 +1082,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/beesure-reg-neogrene-trade",
-      "variants_extracted": 4,
+      "product_url": "https://www.safcodental.com/product/microflex-sup-reg-sup-neogard-sup-reg-sup",
+      "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1250,7 +1104,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/microflex-sup-reg-sup-neogard-sup-reg-sup",
+      "product_url": "https://www.safcodental.com/product/bio-nitrile-sup-reg-sup",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -1272,8 +1126,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/bio-nitrile-sup-reg-sup",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/quantum-blue",
+      "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1294,8 +1148,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/quantum-blue",
-      "variants_extracted": 4,
+      "product_url": "https://www.safcodental.com/product/trueform",
+      "variants_extracted": 2,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1316,8 +1170,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/trueform",
-      "variants_extracted": 2,
+      "product_url": "https://www.safcodental.com/product/microflex-reg-midknight-trade-touch",
+      "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1338,47 +1192,21 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/microflex-reg-midknight-trade-touch",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/micro-touch-reg-nitrafree-trade-pink",
+      "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
-      "missing_expected_fields": [],
+      "missing_expected_fields": [
+        "category_path"
+      ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "embedded_state"
+        "variants": "json_ld_single_item"
       }
     },
     {
       "product_url": "https://www.safcodental.com/product/surgical-blade-handles-bard-parker-bd",
       "variants_extracted": 2,
-      "variants_complete": true,
-      "warnings": [],
-      "missing_expected_fields": [],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "embedded_state"
-      }
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/micro-touch-reg-nitrafree-trade-pink",
-      "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
-      "missing_expected_fields": [
-        "category_path",
-        "variants_complete"
-      ],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "json_ld_fallback"
-      }
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/surgical-blades",
-      "variants_extracted": 9,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1399,8 +1227,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/surgical-blades-integra-miltex",
-      "variants_extracted": 17,
+      "product_url": "https://www.safcodental.com/product/surgical-blades",
+      "variants_extracted": 9,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1421,6 +1249,28 @@
       }
     },
     {
+      "product_url": "https://www.safcodental.com/product/surgical-blades-integra-miltex",
+      "variants_extracted": 17,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
+      "product_url": "https://www.safcodental.com/product/luxe-trade",
+      "variants_extracted": 5,
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
+      "method_summary": {
+        "product": "json_ld",
+        "variants": "embedded_state"
+      }
+    },
+    {
       "product_url": "https://www.safcodental.com/product/surgical-blades-bard-parker-bd",
       "variants_extracted": 6,
       "variants_complete": true,
@@ -1432,7 +1282,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/luxe-trade",
+      "product_url": "https://www.safcodental.com/product/inspire-trade",
       "variants_extracted": 5,
       "variants_complete": true,
       "warnings": [],
@@ -1454,8 +1304,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/inspire-trade",
-      "variants_extracted": 5,
+      "product_url": "https://www.safcodental.com/product/transcend-trade",
+      "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1476,7 +1326,7 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/transcend-trade",
+      "product_url": "https://www.safcodental.com/product/beesure-reg-glacier-nitrile",
       "variants_extracted": 4,
       "variants_complete": true,
       "warnings": [],
@@ -1498,8 +1348,8 @@
       }
     },
     {
-      "product_url": "https://www.safcodental.com/product/beesure-reg-glacier-nitrile",
-      "variants_extracted": 4,
+      "product_url": "https://www.safcodental.com/product/revo200-reg",
+      "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1511,17 +1361,6 @@
     {
       "product_url": "https://www.safcodental.com/product/ethicon-sutures",
       "variants_extracted": 35,
-      "variants_complete": true,
-      "warnings": [],
-      "missing_expected_fields": [],
-      "method_summary": {
-        "product": "json_ld",
-        "variants": "embedded_state"
-      }
-    },
-    {
-      "product_url": "https://www.safcodental.com/product/revo200-reg",
-      "variants_extracted": 1,
       "variants_complete": true,
       "warnings": [],
       "missing_expected_fields": [],
@@ -1566,17 +1405,12 @@
     {
       "product_url": "https://www.safcodental.com/product/contour-reg",
       "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
-      "missing_expected_fields": [
-        "variants_complete"
-      ],
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_fallback"
+        "variants": "json_ld_single_item"
       }
     },
     {
@@ -1813,18 +1647,14 @@
     {
       "product_url": "https://www.safcodental.com/product/alasta-sup-reg-sup-white",
       "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
+      "variants_complete": true,
+      "warnings": [],
       "missing_expected_fields": [
-        "category_path",
-        "variants_complete"
+        "category_path"
       ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_fallback"
+        "variants": "json_ld_single_item"
       }
     },
     {
@@ -1918,17 +1748,12 @@
     {
       "product_url": "https://www.safcodental.com/product/polymed-reg",
       "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
-      "missing_expected_fields": [
-        "variants_complete"
-      ],
+      "variants_complete": true,
+      "warnings": [],
+      "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_fallback"
+        "variants": "json_ld_single_item"
       }
     },
     {
@@ -1967,18 +1792,14 @@
     {
       "product_url": "https://www.safcodental.com/product/microflex-reg-comfortgrip-trade",
       "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
+      "variants_complete": true,
+      "warnings": [],
       "missing_expected_fields": [
-        "category_path",
-        "variants_complete"
+        "category_path"
       ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_fallback"
+        "variants": "json_ld_single_item"
       }
     },
     {
@@ -1995,18 +1816,14 @@
     {
       "product_url": "https://www.safcodental.com/product/micropro-textured",
       "variants_extracted": 1,
-      "variants_complete": false,
-      "warnings": [
-        "masterData inner value must be an object",
-        "window.masterData absent or unusable; emitted JSON-LD fallback variant"
-      ],
+      "variants_complete": true,
+      "warnings": [],
       "missing_expected_fields": [
-        "category_path",
-        "variants_complete"
+        "category_path"
       ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_fallback"
+        "variants": "json_ld_single_item"
       }
     },
     {
@@ -2036,6 +1853,7 @@
     "sqlite": "data\\catalog.db",
     "json": "output\\products.json",
     "csv": "output\\products.csv",
-    "agreement": "output\\agreement_report.json"
+    "agreement": "output\\agreement_report.json",
+    "run_report": "output\\run_report.json"
   }
 }

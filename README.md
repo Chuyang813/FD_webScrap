@@ -41,21 +41,20 @@ python main.py --max-products 5 --no-llm
 No credentials are required. The deterministic crawler is the whole product; the
 LLM is optional and off by default when `--no-llm` is passed.
 
-### Current sample in this repository
+### Current dataset in this repository
 
 | Metric | Value |
 |---|---:|
 | Product families discovered | 154 (56 sutures/surgical + 98 gloves) |
-| Product families extracted | 7 |
-| Variants extracted | 22 |
+| Product families extracted | **154 (100%)** |
+| Variants extracted | **760** |
 | Categories covered | 2 of 2 |
-| Automated tests | 50 passing |
+| Extraction failures | 0 |
+| Cross-extractor agreement (core fields) | 0.997 over 12 sampled products |
+| Automated tests | 74 passing |
 
-The committed dataset is a **sample**, not a full crawl. `--max-products` is a
-global demo limit, not a discovery limit: discovery consistently enumerates all
-154 public families, and the remaining URLs are persisted as `pending` crawl
-state. Running `python main.py` without a limit continues from that state and
-extracts the rest.
+Both assigned categories are crawled to completion. The full run took about nine
+minutes at one request per second and required no retries.
 
 ---
 
@@ -444,14 +443,44 @@ discovery regression, not a smaller catalog.
 
 **4. Cross-extractor agreement.** Field-level agreement between the deterministic
 and LLM extractors on a sample, using per-type comparison: normalized equality
-for identifiers, numeric tolerance for prices, set comparison for image and
-alternative URLs, structured key comparison for specifications.
+for identifiers, numeric tolerance for prices, set comparison for URL lists,
+structured key comparison for specifications.
 
 This is the signal that catches *silent* drift — the case the other three miss.
 If Safco moves a value and a selector starts returning a plausible but wrong
 string, completeness stays at 100% and provenance is unchanged, but agreement
-against an independent reader drops. Falling below the configured threshold
-triggers a Recovery record.
+against an independent reader drops.
+
+**Fields are tiered, and only core fields set the threshold.** A first live run
+made the reason obvious. Scored flat across all fields, agreement was 0.76, which
+looks like a failing extractor. Split by tier it reads very differently:
+
+| Tier | Score | Meaning |
+|---|---:|---|
+| **Core** | 0.997 | Both extractors read the same explicit source, so disagreement is real drift |
+| **Advisory** | 0.349 | Both are arguably right but structure the answer differently |
+
+Core covers `name`, `brand`, `product_url`, `description`, `image_urls`, `sku`,
+`price`, `currency`, `price_visibility`, and `availability` — nine of those ten
+scored exactly 1.000.
+
+Advisory covers `category_path`, `option_values`, `item_number`, `product_code`,
+`unit_pack_size`, `specifications`, `alternative_product_urls`, and
+`variant_image_urls`. These score low for benign reasons: the deterministic
+reader copies Safco's breadcrumb path verbatim while the LLM infers its own
+granularity, and it copies the raw option encoding while the LLM reshapes it into
+semantic keys such as `{"size": "Small"}`. Both readings are defensible, so
+comparing them by equality measures formatting, not correctness.
+
+Mixing the two tiers produced a number that could neither confirm health nor
+locate a fault. Only the core score is compared to `llm.agreement_threshold`, so
+representation differences can neither manufacture nor mask a drift alert;
+advisory scores stay in the report for visibility.
+
+Where a difference turned out to be purely cosmetic it is normalized instead of
+excluded — `availability` compares with punctuation stripped, since "In stock"
+and "InStock" are the same fact. That single change moved it from 0.539 to 1.000
+and qualified it as a core field.
 
 **What this does not claim.** Cross-extractor agreement is consistency, not
 accuracy. Both extractors can agree and both be wrong. Real accuracy requires
@@ -520,9 +549,6 @@ Concretely:
 
 Stated plainly rather than hidden; each notes what would resolve it.
 
-- **The committed dataset is a 7-family sample**, not a full crawl. Discovery
-  covers all 154; extraction was limited for review convenience. Removing
-  `--max-products` completes it from persisted crawl state.
 - **Specifications are empty.** Verified against cached product pages: Safco's
   product pages carry no specification markup at all. Emitted as `{}` with
   `not_available` provenance rather than fabricated. A specification feed or
@@ -532,16 +558,22 @@ Stated plainly rather than hidden; each notes what would resolve it.
   only empty containers. Capturing them needs either browser rendering or the
   recommendation service API. Emitting same-category products instead would
   invent a relationship the site does not assert.
-- **The shadow LLM path has not been exercised against a live provider.** No
-  credentials were configured in this environment, so `agreement_report.json`
-  currently records `"status": "skipped"` with the missing variable names. The
-  adapter, schema validation, comparator, and skip/failure handling are covered
-  by tests with mocked responses. Supplying credentials and rerunning populates
-  the report.
+- **The shadow sample is small and drawn from the head of the queue.** The
+  committed report covers 12 products, bounded by free-tier provider quota rather
+  than by design. Sampling takes the first N extracted products; because
+  discovery interleaves categories round-robin the sample spans both, but it is
+  not randomized or stratified by template. A production run would sample
+  randomly across the catalog with paid quota.
 - **No LLM-generated repair suggestions.** `RecoveryAgent` records and validates
   suggestions and guarantees selectors are never auto-modified, but no component
-  currently generates candidates from a failing page. The trigger and audit path
-  exist; the generator does not.
+  currently generates candidates from a failing page. The trigger, schema, and
+  audit path exist; the generator does not. This is the largest remaining gap
+  between the design and the implementation.
+- **Advisory-tier agreement is not actionable as written.** It correctly
+  identifies that the two extractors disagree on representation, but it cannot
+  distinguish "the LLM reshaped the answer" from "the deterministic reader broke".
+  Making those fields useful needs either canonicalization on both sides or a
+  prompt that pins the expected representation.
 - **Discovery depends on Safco's current public Algolia integration**, which can
   change without notice. The JSON-LD list is the documented fallback, and the run
   report records which method was used.
@@ -560,7 +592,8 @@ Stated plainly rather than hidden; each notes what would resolve it.
 
 ## Testing
 
-50 tests, no network access required:
+74 tests, no network access required. Provider traffic is mocked, so the suite
+spends no API quota:
 
 ```bash
 python -m pytest -q

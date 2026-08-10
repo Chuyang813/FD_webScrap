@@ -44,7 +44,10 @@ Items are marked complete only when backed by automated or live-run evidence.
 - [x] Repository, snapshot preservation, idempotency, and export tests.
 - [x] Shadow schema/skip behavior and field-level comparator tests.
 - [x] Orchestrator success/partial/zero-discovery/redirect tests.
-- [x] Limited live crawl discovered 154 families and extracted both categories.
+- [x] Full live crawl discovered 154 families and extracted all 154 with 760
+  variants and zero failures.
+- [x] Live shadow LLM comparison against Gemini produced 0.997 core-field
+  agreement over 12 sampled products.
 - [x] Second run kept product and variant counts stable without duplicate rows.
 - [x] Offline replay completed with 0 HTTP fetches and 19 cache hits.
 - [x] Resume processed the next two products and preserved completed records.
@@ -59,9 +62,16 @@ Items are marked complete only when backed by automated or live-run evidence.
 - **Specifications and recommendations:** structured PDP specifications and
   client-rendered recommendations are not extracted reliably. Empty values carry
   `not_available` provenance and appear in completeness metrics.
-- **Live LLM evidence:** no provider credentials were supplied, so no external LLM
-  request was made. The adapter and comparison flow are mock-tested; the generated
-  report records the missing-configuration or disabled reason.
+- **Shadow sample size:** the committed comparison covers 12 products, bounded by
+  free-tier provider quota rather than by design, and samples the head of the
+  queue rather than randomly. Production would sample randomly with paid quota.
+- **LLM-generated repair suggestions:** the recovery trigger, suggestion schema,
+  and audit record exist, but nothing generates candidate selectors from a
+  failing page. This is the largest remaining design-to-implementation gap.
+- **Advisory-tier agreement:** low scores correctly flag representation
+  differences but cannot separate "the LLM reshaped it" from "the deterministic
+  reader broke". Canonicalizing both sides would be required to make them
+  actionable.
 - **Browser fallback:** omitted because it adds no value for the currently required
   initial-HTML fields.
 - **Automatic selector mutation:** intentionally prohibited; recovery suggestions
