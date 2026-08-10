@@ -17,9 +17,19 @@ from agents import (
 )
 from app_config import AppConfig, CategoryConfig
 from extraction.comparator import ExtractionComparator
+from extraction.field_values import REPAIRABLE_FIELDS, known_value, repairable_field
+from extraction.locators import LocatorSample
 from fetchers import CachedFetcher, FetchRequest, HttpFetcher
 from llm import LLMSettings, ShadowEvidence, ShadowLLMExtractor
-from models import CrawlStatus, ExtractionResult, FieldSource, PageType, PriceVisibility
+from llm.repair import SelectorRepairAdvisor
+from models import (
+    CrawlStatus,
+    ExtractionResult,
+    FieldSource,
+    PageType,
+    PriceVisibility,
+    Product,
+)
 from policy import RobotsDecision, RobotsPolicy
 from reporting import write_dashboard
 from run_metrics import RunMetrics
@@ -89,6 +99,12 @@ class CatalogOrchestrator:
             requests_per_minute=config.llm.requests_per_minute,
             max_retries=config.llm.max_retries,
         )
+        self.repair_advisor = SelectorRepairAdvisor(self.llm_settings)
+        # Successful pages double as the regression suite a repair candidate must
+        # satisfy, so they are kept from the run itself rather than re-fetched.
+        self.repair_samples: list[tuple[str, str, dict[str, str]]] = []
+        self.repair_targets: dict[str, str] = {}
+        self.repair_diagnoses: list[dict[str, Any]] = []
         self.shadow_pairs: list[tuple[ExtractionResult, ExtractionResult]] = []
         self.shadow_evidence: list[dict[str, Any]] = []
         self.recovery_records: list[dict[str, Any]] = []
@@ -113,6 +129,7 @@ class CatalogOrchestrator:
             )
             for candidate in candidates:
                 await self._process_product(candidate)
+            await self._run_repair_diagnosis()
             export_products_json(self.repository, self.config.output.json_path)
             export_products_csv(self.repository, self.config.output.csv_path)
             agreement = self._write_agreement_report()
@@ -157,6 +174,84 @@ class CatalogOrchestrator:
             flags.append("resume")
         flags.append("no-llm" if self.options.no_llm else "llm-shadow")
         return ", ".join(flags)
+
+    def _remember_repair_sample(
+        self,
+        url: str,
+        html: str,
+        *,
+        result: ExtractionResult | None = None,
+        previous: Product | None = None,
+    ) -> None:
+        """Pair a page as it looks now with values already known to be correct.
+
+        Two sources, because they cover different failures. A stored record from an
+        earlier run is the stronger one: when a layout change breaks every page at
+        once, nothing in the current run can supply ground truth, but the database
+        still holds what the field used to be. A successful extraction from this
+        run covers the partial case, where only some templates changed.
+        """
+
+        if len(self.repair_samples) >= self.config.llm.repair_samples:
+            return
+        values: dict[str, str] = {}
+        if previous is not None:
+            for name in ("name", "brand", "description"):
+                value = getattr(previous, name, None)
+                if value:
+                    values[name] = str(value).strip()
+        if result is not None:
+            for name in REPAIRABLE_FIELDS:
+                value = known_value(result, name)
+                if value:
+                    values.setdefault(name, value)
+        if values:
+            self.repair_samples.append((url, html, values))
+
+    def _note_repair_targets(self, missing_fields: list[str], html: str) -> None:
+        """Record the first failing page per field; later ones add no information."""
+
+        for reported in missing_fields:
+            field_name = repairable_field(reported)
+            if field_name and field_name not in self.repair_targets:
+                self.repair_targets[field_name] = html
+
+    async def _run_repair_diagnosis(self) -> None:
+        """Ask for candidate locators, then keep only those that prove themselves."""
+
+        if (
+            self.options.no_llm
+            or not self.config.llm.enabled
+            or not self.config.llm.repair_enabled
+            or not self.repair_targets
+            or self.config.llm.repair_max_fields <= 0
+        ):
+            return
+
+        for field_name in list(self.repair_targets)[: self.config.llm.repair_max_fields]:
+            samples = [
+                LocatorSample(url=url, html=html, expected=values[field_name])
+                for url, html, values in self.repair_samples
+                if field_name in values
+            ]
+            diagnosis = await self.repair_advisor.diagnose(
+                field_name=field_name,
+                failing_html=self.repair_targets[field_name],
+                samples=samples,
+            )
+            record = diagnosis.model_dump(mode="json")
+            self.repair_diagnoses.append(record)
+            if diagnosis.request_sent:
+                self.metrics.repair_suggestions += len(diagnosis.accepted)
+            log_event(
+                self.logger,
+                "repair_diagnosis",
+                field=field_name,
+                status=diagnosis.status,
+                samples=len(samples),
+                validated=len(diagnosis.accepted),
+                selectors_modified=False,
+            )
 
     def _write_dashboard(self) -> None:
         """Presentation must never be able to fail a crawl that already succeeded."""
@@ -469,6 +564,12 @@ class CatalogOrchestrator:
                         "method_summary": result.method_summary,
                     }
                 )
+                self._note_repair_targets(result.missing_expected_fields, fetched.body)
+                # The changed page is the one a candidate has to work on, and the
+                # stored record supplies the value it must reproduce.
+                self._remember_repair_sample(
+                    fetched.url, fetched.body, result=result, previous=previous_product
+                )
                 raise ValueError(
                     "incomplete variant snapshot was retained for review and retry"
                 )
@@ -494,6 +595,9 @@ class CatalogOrchestrator:
                 }
             )
 
+            self._remember_repair_sample(
+                fetched.url, fetched.body, result=result, previous=previous_product
+            )
             recovery = self.recovery.assess(result, validation=validation)
             if recovery.disposition != "no_action":
                 self.recovery_records.append(recovery.model_dump(mode="json"))
@@ -687,6 +791,7 @@ class CatalogOrchestrator:
                 "overall_agreement": agreement["overall_agreement"],
             },
             "recovery_records": self.recovery_records,
+            "repair_diagnoses": self.repair_diagnoses,
             "extraction_audits": self.extraction_audits,
             "outputs": {
                 "sqlite": str(self.config.storage.sqlite_path),

@@ -133,7 +133,13 @@ class OpenAICompatibleAdapter:
             },
         }
 
-    async def extract(self, *, context: str) -> ExtractionResult:
+    async def post_for_content(self, payload_body: dict[str, Any]) -> str:
+        """Send one chat completion and return the assistant's text content.
+
+        Shared by every caller so rate limiting, retries, and quota handling are
+        defined once rather than per feature.
+        """
+
         missing = self.settings.missing_configuration
         if missing:
             raise RuntimeError("missing LLM configuration: " + ", ".join(missing))
@@ -142,7 +148,6 @@ class OpenAICompatibleAdapter:
             "Authorization": f"Bearer {self.settings.api_key}",
             "Content-Type": "application/json",
         }
-        payload_body = self.request_payload(context=context)
         async with httpx.AsyncClient(
             timeout=self.settings.timeout_seconds,
             transport=self._transport,
@@ -179,6 +184,10 @@ class OpenAICompatibleAdapter:
             )
         if not isinstance(content, str):
             raise ValueError("OpenAI-compatible assistant content must be text")
+        return content
+
+    async def extract(self, *, context: str) -> ExtractionResult:
+        content = await self.post_for_content(self.request_payload(context=context))
         # Validation remains local even when a provider claims schema adherence.
         try:
             return ExtractionResult.model_validate_json(content)

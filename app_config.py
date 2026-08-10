@@ -58,6 +58,11 @@ class LLMConfig(BaseModel):
     # Free provider tiers are commonly capped near five requests per minute.
     requests_per_minute: float = Field(default=5, gt=0)
     max_retries: int = Field(default=2, ge=0)
+    repair_enabled: bool = True
+    #: Distinct fields diagnosed per run; each costs one provider request.
+    repair_max_fields: int = Field(default=2, ge=0)
+    #: Known-good pages a candidate locator must reproduce before it is recorded.
+    repair_samples: int = Field(default=8, ge=1)
 
 
 class AppConfig(BaseModel):

@@ -51,7 +51,7 @@ LLM is optional and off by default when `--no-llm` is passed.
 | Categories covered | 2 of 2 |
 | Extraction failures | 0 |
 | Cross-extractor agreement (core fields) | 0.997 over 12 sampled products |
-| Automated tests | 86 passing |
+| Automated tests | 104 passing |
 
 Both assigned categories are crawled to completion. The full run took about nine
 minutes at one request per second and required no retries.
@@ -98,16 +98,28 @@ minutes at one request per second and required no retries.
                      │  records triggers + review suggestions; never edits  │
                      │  selectors automatically                             │
                      └────────┬────────────────────────────────────────────┘
+                              │ field missing
+                     ┌────────▼─────────────────────────┐
+                     │        Repair advisor            │
+                     │  LLM proposes candidate locators │
+                     │            ↓                     │
+                     │  validated against pages whose   │
+                     │  correct value is already known  │
+                     │            ↓                     │
+                     │  passes → recorded for review    │
+                     │  fails  → discarded + logged     │
+                     └────────┬─────────────────────────┘
                               │
                      ┌────────▼────────┐
                      │  SQLite (4 tbl) │──▶ products.json / products.csv
-                     │  idempotent     │──▶ run_report.json
+                     │  idempotent     │──▶ run_report.json / dashboard.html
                      │  upsert + state │──▶ agreement_report.json
                      └─────────────────┘
 ```
 
 Only the sampled subset reaches the shadow extractor and comparator; the other
-products go straight from validation to storage.
+products go straight from validation to storage. The repair advisor runs only when
+a field is actually missing, and never on the happy path.
 
 ### Reconnaissance findings that shaped the design
 
@@ -174,6 +186,7 @@ is a single implementation swap.
 | **Extractor** | Product/Breadcrumb JSON-LD, double-decoded `window.masterData` variants, per-field provenance, extraction warnings | Decide record validity |
 | **Validator** | Pydantic contract enforcement, normalization, incomplete-snapshot protection, duplicate detection | Fetch or retry |
 | **Recovery** | Recording triggers (missing field, validation failure, agreement drop) and review suggestions | Modify selectors automatically |
+| **Repair advisor** | Proposing where a missing field moved to, then proving or discarding each candidate against known values | Trust the model, or edit extraction code |
 | **Shadow LLM** | Bounded structured context, strict-schema extraction, local validation | Participate in the normal crawl path |
 | **Comparator** | Field-level agreement between the two extractors, using per-type comparison rules | Claim accuracy |
 | **Reporting** | Rendering the stored catalogue and run artifacts as a dashboard | Touch the crawl — a render failure is logged, never fatal |
@@ -237,6 +250,7 @@ python main.py --force-refresh --max-products 5  # bypass fresh cache entries
 python main.py --offline --max-products 5        # cache only; makes no network requests
 python main.py --max-products 5 --shadow-sample 2 # attempt LLM shadow comparison
 python -m pytest -q                              # test suite
+python demo_repair.py                            # live selector-repair demo
 ```
 
 `--offline` and `--force-refresh` are mutually exclusive.
@@ -513,6 +527,37 @@ labelled samples, manual audit, or a trusted reference feed. The report is
 labelled `"terminology": "cross-extractor agreement"` so the number is not read
 as correctness.
 
+### When a signal fires: selector repair
+
+The signals above detect that extraction broke. The repair advisor is what turns
+that detection into a candidate fix, and it is the one place an LLM does something
+deterministic code cannot: read a page layout it has never seen and infer where a
+value moved to.
+
+```text
+field missing → propose locators → evaluate each against pages whose
+                                   correct value is already known
+                                          │
+                          reproduces all ─┴─ does not
+                                 │              │
+                       record for review     discard, log
+```
+
+A proposal is a hypothesis, never a change. Candidates are declarative locators —
+a CSS selector, an attribute, or a `window.*` variable with a dotted path —
+evaluated by parsing, never by executing page script. Ground truth comes from
+pairing **the page as it looks now** with **the value the catalogue already
+recorded**, so a change that breaks every page at once can still be diagnosed.
+
+`python demo_repair.py` runs the whole loop against a real provider on a
+deliberately altered page. A recorded transcript is in
+[`notes/repair_demo.md`](notes/repair_demo.md); the short version is that the
+model reported 0.95 confidence and one of its two proposals was still wrong. The
+validator caught it by observing that the candidate reproduced 0 of 1 known
+values. That is why confidence is recorded but never acted on, and why adoption
+stays a human decision — `RecoveryRecord` carries `selectors_modified: False` as a
+type-level guarantee.
+
 **In production** these would be emitted per run to a metrics backend with alerts
 on: extraction success below 95%, per-category count change beyond ±20%,
 provenance share shifting more than 10 points run over run, agreement below
@@ -589,11 +634,13 @@ Stated plainly rather than hidden; each notes what would resolve it.
   discovery interleaves categories round-robin the sample spans both, but it is
   not randomized or stratified by template. A production run would sample
   randomly across the catalog with paid quota.
-- **No LLM-generated repair suggestions.** `RecoveryAgent` records and validates
-  suggestions and guarantees selectors are never auto-modified, but no component
-  currently generates candidates from a failing page. The trigger, schema, and
-  audit path exist; the generator does not. This is the largest remaining gap
-  between the design and the implementation.
+- **Repair proposals are validated for correctness, not maintainability.** A
+  candidate earns adoption by reproducing known values; nothing judges whether the
+  expression is narrow or durable. `body @data-manufacturer` passes the check where
+  a human would likely write something tighter.
+- **Repair needs prior ground truth.** Samples pair the changed page with the value
+  the database already holds, so a first run against an empty database has nothing
+  to validate against and the advisor declines rather than guessing.
 - **Advisory-tier agreement is not actionable as written.** It correctly
   identifies that the two extractors disagree on representation, but it cannot
   distinguish "the LLM reshaped the answer" from "the deterministic reader broke".
@@ -617,7 +664,7 @@ Stated plainly rather than hidden; each notes what would resolve it.
 
 ## Testing
 
-86 tests, no network access required. Provider traffic is mocked, so the suite
+104 tests, no network access required. Provider traffic is mocked, so the suite
 spends no API quota:
 
 ```bash
@@ -637,6 +684,8 @@ python -m pytest -q
 | Shadow LLM | Strict schema handling, skip behaviour, provider failure as evidence |
 | Orchestrator | Completed, partial, zero-discovery, and redirect paths |
 | Dashboard | Completeness maths, provenance counts, self-containment, both themes |
+| Locators | CSS and `window.*` evaluation, malformed input, partial-match rejection |
+| Repair | End-to-end on a relocated field: correct candidate kept, plausible one rejected |
 
 Fixtures make extraction reproducible without hitting the live site, which also
 means a future selector change can be tested before deployment.
