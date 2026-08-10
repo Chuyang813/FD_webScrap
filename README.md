@@ -295,6 +295,13 @@ change is needed to retarget or retune the crawl.
 | `output/run_report.json` | Status, metrics, discovery, completeness, provenance, audits |
 | `output/agreement_report.json` | Shadow evidence and field-level agreement, or skip reason |
 
+Exports are regenerated from the database on every run, so they always reflect
+the full stored catalogue rather than only the rows one run touched. The
+agreement report is the exception: a run that produces no shadow samples leaves
+an existing populated report in place instead of overwriting it with an empty
+one, and records `"status": "preserved"` in the run report. Resuming an already
+complete crawl therefore cannot destroy earlier evidence.
+
 ### Product
 
 | Field | Type | Notes |

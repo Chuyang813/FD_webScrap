@@ -170,11 +170,18 @@ class ProgressReporter:
     def category_failed(self, *, name: str, error: str) -> None:
         self._emit(f"  discovery   {name:<20} {self._paint('FAILED', _RED)}  {error[:60]}")
 
-    def crawl_started(self, *, total: int) -> None:
+    def crawl_started(self, *, total: int, note: str | None = None) -> None:
         self.total = total
         if not self.enabled:
             return
         self._emit("")
+        if total == 0:
+            # "0 products" on its own reads like a failure; say why there is
+            # nothing to do.
+            self._emit(self._paint("  nothing to extract", _YELLOW))
+            if note:
+                self._emit(self._paint(f"  {note}", _DIM))
+            return
         self._emit(self._paint(f"  extracting {total} product families", _BOLD))
         self._render_status()
 
@@ -216,18 +223,32 @@ class ProgressReporter:
             text = self._paint(f"{status} ({sample} requested)", _DIM)
         self._emit(f"  shadow LLM  {text}")
 
-    def finished(self, *, status: str, outputs: dict[str, Any]) -> None:
+    def finished(
+        self,
+        *,
+        status: str,
+        outputs: dict[str, Any],
+        stored: tuple[int, int] | None = None,
+    ) -> None:
         if not self.enabled:
             return
         self._clear_status()
         colour = {"completed": _GREEN, "partial": _YELLOW}.get(status, _RED)
         elapsed = self._clock(time.monotonic() - self.started_at)
         self._emit("")
-        self._emit(
-            f"  {self._paint(status.upper(), colour)}  "
-            f"{self.products} products, {self.variants} variants, "
-            f"{self.errors} errors in {elapsed}"
-        )
+        if self.total == 0 and stored is not None:
+            # Report the catalogue that exists, not the zero rows this run added.
+            products, variants = stored
+            self._emit(
+                f"  {self._paint(status.upper(), colour)}  no work to do; "
+                f"database already holds {products} products and {variants} variants"
+            )
+        else:
+            self._emit(
+                f"  {self._paint(status.upper(), colour)}  "
+                f"{self.products} products, {self.variants} variants, "
+                f"{self.errors} errors in {elapsed}"
+            )
         for label, path in outputs.items():
             self._emit(self._paint(f"    {label:<10} {path}", _DIM))
         self._emit("")

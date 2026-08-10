@@ -106,7 +106,10 @@ class CatalogOrchestrator:
             discovered = await self._discover_categories()
             candidates = self._eligible_candidates(discovered)
             self.products_planned = len(candidates)
-            self.progress.crawl_started(total=len(candidates))
+            self.progress.crawl_started(
+                total=len(candidates),
+                note=self._nothing_pending_note() if not candidates else None,
+            )
             for candidate in candidates:
                 await self._process_product(candidate)
             export_products_json(self.repository, self.config.output.json_path)
@@ -121,6 +124,10 @@ class CatalogOrchestrator:
             self.progress.finished(
                 status=str(report.get("status", "failed")),
                 outputs=self._progress_outputs(),
+                stored=(
+                    self.repository.count_products(),
+                    self.repository.count_variants(),
+                ),
             )
             log_event(
                 self.logger,
@@ -148,6 +155,21 @@ class CatalogOrchestrator:
             flags.append("resume")
         flags.append("no-llm" if self.options.no_llm else "llm-shadow")
         return ", ".join(flags)
+
+    def _nothing_pending_note(self) -> str:
+        """Explain an empty work list so it does not read as a failed crawl."""
+
+        discovered = self.metrics.urls_discovered
+        if self.options.resume and discovered:
+            return (
+                f"all {discovered} discovered families are already complete; "
+                "use --force-refresh to re-extract them"
+            )
+        if not discovered:
+            return "discovery returned no product URLs"
+        if self.options.max_products == 0:
+            return "--max-products is zero"
+        return "no eligible product URLs remained after filtering"
 
     def _progress_outputs(self) -> dict[str, str]:
         outputs = {
@@ -559,10 +581,41 @@ class CatalogOrchestrator:
             status, reason = "failed", "all shadow samples failed"
 
         summary = self.comparator.summarize(self.shadow_pairs)
+        # A run that sampled nothing must not erase evidence produced by one that
+        # did. Resuming a finished crawl would otherwise silently destroy the
+        # report simply because there was no remaining work.
+        if not self.shadow_evidence:
+            existing = self._read_json(self.config.output.agreement_path)
+            if existing and existing.get("sample_size"):
+                log_event(
+                    self.logger,
+                    "agreement_report_preserved",
+                    path=str(self.config.output.agreement_path),
+                    preserved_sample_size=existing.get("sample_size"),
+                    reason=reason,
+                )
+                return {
+                    "status": "preserved",
+                    "reason": (
+                        f"this run produced no shadow samples ({reason}); "
+                        "the existing report was kept"
+                    ),
+                    "sample_size": 0,
+                    "overall_agreement": None,
+                    "preserved_report": {
+                        "sample_size": existing.get("sample_size"),
+                        "overall_agreement": existing.get("overall_agreement"),
+                        "advisory_agreement": existing.get("advisory_agreement"),
+                        "generated_at": existing.get("generated_at"),
+                        "model": existing.get("model"),
+                    },
+                }
+
         report = {
             "terminology": "cross-extractor agreement",
             "status": status,
             "reason": reason,
+            "generated_at": datetime.now(UTC).isoformat(),
             "provider": self.llm_settings.provider,
             "model": self.llm_settings.model,
             "sample_requested": sample_limit,
@@ -695,6 +748,19 @@ class CatalogOrchestrator:
             json.dumps(value, ensure_ascii=False, indent=2, default=str),
             encoding="utf-8",
         )
+
+    @staticmethod
+    def _read_json(path: str | Path) -> dict[str, Any] | None:
+        """Read a previous artifact; an unreadable one is treated as absent."""
+
+        target = Path(path)
+        if not target.exists():
+            return None
+        try:
+            loaded = json.loads(target.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return None
+        return loaded if isinstance(loaded, dict) else None
 
     def _require_allowed_final_url(self, requested_url: str, final_url: str) -> None:
         requested = urlsplit(requested_url)
