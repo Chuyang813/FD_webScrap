@@ -175,6 +175,9 @@ class DeterministicProductExtractor:
         except MasterDataDecodeError as exc:
             master_data = None
             warnings.append(str(exc))
+        # An empty mapping is the page stating this family has no child items,
+        # which is a complete answer. A missing or unreadable payload is not.
+        no_child_items = master_data == {}
 
         if master_data:
             for mapping_sku, raw in master_data.items():
@@ -231,7 +234,7 @@ class DeterministicProductExtractor:
                 _variant_payload_supports_images(payload, variant_images)
                 variants.append(ProductVariant.model_validate(payload))
 
-        variants_complete = bool(variants)
+        variants_complete = bool(variants) or no_child_items
         if not variants:
             sku = _clean_text(product_node.get("sku"))
             fallback_images = images
@@ -262,7 +265,10 @@ class DeterministicProductExtractor:
             }
             _variant_payload_supports_images(fallback_payload, fallback_images)
             variants.append(ProductVariant.model_validate(fallback_payload))
-            warnings.append("window.masterData absent or unusable; emitted JSON-LD fallback variant")
+            if not no_child_items:
+                warnings.append(
+                    "window.masterData absent or unusable; emitted JSON-LD fallback variant"
+                )
 
         product_visibility = (
             PriceVisibility.PUBLIC
@@ -300,7 +306,13 @@ class DeterministicProductExtractor:
             missing_expected_fields=missing,
             method_summary={
                 "product": "json_ld",
-                "variants": "embedded_state" if master_data else "json_ld_fallback",
+                "variants": (
+                    "embedded_state"
+                    if master_data
+                    else "json_ld_single_item"
+                    if no_child_items
+                    else "json_ld_fallback"
+                ),
             },
         )
 

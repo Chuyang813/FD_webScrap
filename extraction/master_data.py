@@ -19,7 +19,19 @@ def decode_master_data(html: str) -> dict[str, dict[str, Any]] | None:
 
     Safco emits an outer JSON string literal whose decoded value is the inner
     JSON object. ``raw_decode`` is used so trailing JavaScript cannot be consumed
-    accidentally. A missing assignment is a normal ``None`` result.
+    accidentally.
+
+    Three outcomes are distinguished, because callers must treat them
+    differently:
+
+    * ``None`` - no assignment on the page at all, so nothing can be concluded.
+    * ``{}`` - the page states this family has no child items. PHP serializes an
+      empty associative array as ``[]`` rather than ``{}``, so both encodings map
+      here. This is a complete answer, not a failure.
+    * a populated mapping - the child items keyed by SKU.
+
+    Anything else raises, so a genuinely unreadable payload stays visible instead
+    of being silently downgraded to "no variants".
     """
 
     match = _ASSIGNMENT.search(html)
@@ -36,6 +48,12 @@ def decode_master_data(html: str) -> dict[str, dict[str, Any]] | None:
         decoded = json.loads(encoded)
     except json.JSONDecodeError as exc:
         raise MasterDataDecodeError(f"invalid inner masterData JSON object: {exc.msg}") from exc
+    if isinstance(decoded, list):
+        if decoded:
+            raise MasterDataDecodeError(
+                "masterData inner value must be an object or an empty array"
+            )
+        return {}
     if not isinstance(decoded, dict):
         raise MasterDataDecodeError("masterData inner value must be an object")
     invalid = [key for key, value in decoded.items() if not isinstance(key, str) or not isinstance(value, dict)]
