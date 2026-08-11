@@ -85,7 +85,11 @@ class ValidatorAgent:
         warnings = list(normalized.warnings)
         if _MARKUP.search(normalized.product.name):
             errors.append("product name contains markup")
-        if not normalized.variants:
+        empty_grouped_snapshot = (
+            normalized.variants_complete
+            and normalized.method_summary.get("variants") == "embedded_state_empty_grouped"
+        )
+        if not normalized.variants and not empty_grouped_snapshot:
             errors.append("at least one product variant is required")
 
         unique: list[ProductVariant] = []

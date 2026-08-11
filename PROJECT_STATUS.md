@@ -36,7 +36,7 @@ Items are marked complete only when backed by automated or live-run evidence.
 
 ## Verification evidence
 
-- [x] 50 automated tests pass (`python -m pytest -q`).
+- [x] 106 automated tests pass (`python -m pytest -q`).
 - [x] Normalization/identity and validator tests.
 - [x] Fetch/cache/offline/retry and robots tests.
 - [x] Navigator and degraded-discovery tests.
@@ -44,18 +44,41 @@ Items are marked complete only when backed by automated or live-run evidence.
 - [x] Repository, snapshot preservation, idempotency, and export tests.
 - [x] Shadow schema/skip behavior and field-level comparator tests.
 - [x] Orchestrator success/partial/zero-discovery/redirect tests.
-- [x] Full live crawl discovered 154 families and extracted all 154 with 760
-  variants and zero failures.
+- [x] Full live crawl discovered all 154 family URLs. Corrected committed artifacts
+  were then regenerated from that full-crawl cache: 146 families provide 752
+  current PDP child variants, while 8 catalog-visible grouped parents provide zero
+  child records. Availability remains a separate per-variant field (one current
+  child is labelled `Non-purchasable`). The replay recorded zero family failures.
 - [x] Live shadow LLM comparison against Gemini produced 0.997 core-field
   agreement over 12 sampled products.
 - [x] Second run kept product and variant counts stable without duplicate rows.
-- [x] Offline replay completed with 0 HTTP fetches and 19 cache hits.
 - [x] Resume processed the next two products and preserved completed records.
 - [x] Generated SQLite, JSON, CSV, run report, and agreement report inspected with
-  matching database/export counts and no duplicate identities.
+  reconciled entity counts and no duplicate identities. The flat CSV contains one
+  parent-only row for each of the eight zero-child grouped families.
+- [x] Corrected artifacts replayed entirely from the full-crawl cache (168 cache
+  hits, 0 HTTP calls, 0 failures); the existing 12-sample shadow report was
+  preserved unchanged.
 
 ## Not completed or intentionally deferred
 
+- **Grouped-family lifecycle reconciliation:** eight `grouped` families
+  (`r-t-r-membrane`, `helimend-trade-and-helimend-trade-advanced`,
+  `micro-touch-reg-nitrafree-trade-pink`, `contour-reg`,
+  `alasta-sup-reg-sup-white`, `polymed-reg`,
+  `microflex-reg-comfortgrip-trade`, and `micropro-textured`) remain catalog-visible
+  parents but expose zero children in both live PDP `masterData` and
+  `productConfig`. Of 30 historical candidate child IDs inferred from Algolia,
+  22 resolve to simple records marked `Discontinued` with
+  `visibility_catalog=0` and `visibility_search=0`; the other 8 have no Algolia
+  hit. These are lifecycle remnants, not current PDP child records, so the
+  corrected output count is 752
+  variants across 146 families plus 8 zero-child parent records.
+- **Cross-family SKU membership:** Safco exposes SKU `4180087` with identical
+  item number, options, price, and stock under two distinct suture family pages.
+  The repository therefore retains two family memberships while preventing
+  duplicate variant identities inside either family. A global inventory model
+  should normalize SKU entities separately from family relationships.
 - **Query-page crawling:** intentionally prohibited because Safco robots disallows
   `?page=`/`?p=`. Public Algolia discovery is used; production needs an approved
   feed/API for contractual completeness.
@@ -87,5 +110,6 @@ Items are marked complete only when backed by automated or live-run evidence.
 - **Distributed operation:** PostgreSQL, durable queues, centralized monitoring,
   browser pools, Docker, and deployment automation remain production work.
 
-These deferred items do not block the assigned two-category deterministic POC; they
-are stated explicitly so the output is not presented as more complete than it is.
+These items bound the current two-category deterministic POC. The output is a
+current-PDP snapshot: family representation, child variant records/status, and
+historical Algolia lifecycle records are deliberately reported as separate facts.

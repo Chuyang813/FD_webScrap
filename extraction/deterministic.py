@@ -116,6 +116,18 @@ def _visibility(price: Decimal | None, html: str) -> PriceVisibility:
     return PriceVisibility.NOT_PRESENT
 
 
+def _is_grouped_product_page(html: str) -> bool:
+    """Return whether Safco rendered the PDP with its grouped-product template."""
+
+    body = BeautifulSoup(html, "html.parser").body
+    if body is None:
+        return False
+    return any(
+        str(class_name).casefold() == "page-product-grouped"
+        for class_name in (body.get("class") or [])
+    )
+
+
 def _variant_payload_supports_images(payload: dict[str, Any], images: list[str]) -> None:
     # This conditional keeps the extractor compatible while the shared model is
     # upgraded; current models expose image_urls and receive the field normally.
@@ -178,6 +190,7 @@ class DeterministicProductExtractor:
         # An empty mapping is the page stating this family has no child items,
         # which is a complete answer. A missing or unreadable payload is not.
         no_child_items = master_data == {}
+        empty_grouped_product = no_child_items and _is_grouped_product_page(html)
 
         if master_data:
             for mapping_sku, raw in master_data.items():
@@ -235,7 +248,11 @@ class DeterministicProductExtractor:
                 variants.append(ProductVariant.model_validate(payload))
 
         variants_complete = bool(variants) or no_child_items
-        if not variants:
+        if empty_grouped_product:
+            warnings.append(
+                "grouped product page reports no child items in window.masterData"
+            )
+        elif not variants:
             sku = _clean_text(product_node.get("sku"))
             fallback_images = images
             fallback_price = json_ld_price
@@ -309,6 +326,8 @@ class DeterministicProductExtractor:
                 "variants": (
                     "embedded_state"
                     if master_data
+                    else "embedded_state_empty_grouped"
+                    if empty_grouped_product
                     else "json_ld_single_item"
                     if no_child_items
                     else "json_ld_fallback"

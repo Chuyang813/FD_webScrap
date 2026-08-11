@@ -15,7 +15,25 @@ def isolated_config(tmp_path: Path) -> AppConfig:
     config.output.csv_path = tmp_path / "products.csv"
     config.output.agreement_path = tmp_path / "agreement.json"
     config.output.run_report_path = tmp_path / "run.json"
+    config.output.dashboard_path = tmp_path / "dashboard.html"
     return config
+
+
+def test_isolated_config_keeps_all_generated_files_in_tmp_path(tmp_path) -> None:
+    config = isolated_config(tmp_path)
+
+    assert all(
+        path.is_relative_to(tmp_path)
+        for path in (
+            config.storage.sqlite_path,
+            config.cache.directory,
+            config.output.json_path,
+            config.output.csv_path,
+            config.output.agreement_path,
+            config.output.run_report_path,
+            config.output.dashboard_path,
+        )
+    )
 
 
 @pytest.mark.asyncio

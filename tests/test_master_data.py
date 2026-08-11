@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from agents import ValidatorAgent
 from extraction import DeterministicProductExtractor, decode_master_data
 from extraction.master_data import MasterDataDecodeError
 
@@ -52,27 +53,25 @@ def test_malformed_payload_still_raises() -> None:
         decode_master_data(_page('"{not json"'))
 
 
-def test_single_item_product_is_complete_not_degraded() -> None:
-    """A family with no children is fully extracted from its JSON-LD offer."""
+def test_empty_grouped_product_is_complete_without_aggregate_variant() -> None:
+    """An explicitly empty grouped family must not become a fake parent variant."""
 
     html = (FIXTURES / "single_item_product.html").read_text(encoding="utf-8")
     result = DeterministicProductExtractor().extract(html, URL)
 
     assert result.variants_complete is True, "no child items is a complete answer"
     assert "variants_complete" not in result.missing_expected_fields
-    assert result.warnings == [], "a normal single-item product raises no warning"
-    assert result.method_summary["variants"] == "json_ld_single_item"
-
-    assert len(result.variants) == 1
-    variant = result.variants[0]
-    assert variant.sku == "DRCDA"
-    assert str(variant.price) == "15.99"
-    assert variant.availability == "In Stock"
+    assert result.warnings == [
+        "grouped product page reports no child items in window.masterData"
+    ]
+    assert result.method_summary["variants"] == "embedded_state_empty_grouped"
+    assert result.variants == []
     assert result.product.category_path == [
         "Dental Supplies",
         "Dental Exam Gloves",
         "Nitrile gloves",
     ]
+    assert ValidatorAgent().validate(result).valid is True
 
 
 def test_unreadable_payload_is_still_reported_incomplete() -> None:

@@ -4,7 +4,7 @@
     "categories_processed": 2,
     "urls_discovered": 154,
     "products_extracted": 154,
-    "variants_extracted": 760,
+    "variants_extracted": 752,
     "http_fetches": 0,
     "browser_fetches": 0,
     "cache_hits": 168,
@@ -14,8 +14,8 @@
     "llm_fallback_runs": 0,
     "repair_suggestions": 0,
     "duplicates_prevented": 154,
-    "started_at": "2026-08-10T23:00:35.468176+00:00",
-    "duration_seconds": 93.968
+    "started_at": "2026-08-11T00:04:09.448464+00:00",
+    "duration_seconds": 95.64
   },
   "robots": {
     "decision": "ALLOWED",
@@ -43,7 +43,7 @@
   "products_planned": 154,
   "database_snapshot": {
     "products": 154,
-    "variants": 760,
+    "variants": 752,
     "product_completeness": {
       "name": 1.0,
       "brand": 1.0,
@@ -56,9 +56,9 @@
     },
     "variant_completeness": {
       "sku": 1.0,
-      "item_number": 0.9895,
+      "item_number": 1.0,
       "price": 1.0,
-      "unit_pack_size": 0.8789,
+      "unit_pack_size": 0.8883,
       "availability": 1.0,
       "price_visibility": 1.0
     },
@@ -80,9 +80,9 @@
       "Dental Supplies > Dental Exam Gloves > Glove Holder": 1
     },
     "field_provenance_counts": {
-      "derived": 2488,
+      "derived": 2480,
       "embedded_state": 4512,
-      "json_ld": 968,
+      "json_ld": 920,
       "not_available": 308
     }
   },
@@ -111,7 +111,7 @@
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T23:01:33.719023Z"
+      "recorded_at": "2026-08-11T00:05:10.106201Z"
     },
     {
       "product_url": "https://www.safcodental.com/product/alasta-sup-reg-sup-white",
@@ -124,7 +124,7 @@
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T23:01:58.329487Z"
+      "recorded_at": "2026-08-11T00:05:34.107075Z"
     },
     {
       "product_url": "https://www.safcodental.com/product/microflex-reg-comfortgrip-trade",
@@ -137,7 +137,7 @@
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T23:02:06.279014Z"
+      "recorded_at": "2026-08-11T00:05:41.750952Z"
     },
     {
       "product_url": "https://www.safcodental.com/product/micropro-textured",
@@ -150,7 +150,7 @@
       "suggestions": [],
       "disposition": "recorded_for_review",
       "selectors_modified": false,
-      "recorded_at": "2026-08-10T23:02:07.436942Z"
+      "recorded_at": "2026-08-11T00:05:43.014778Z"
     }
   ],
   "repair_diagnoses": [],
@@ -641,13 +641,15 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/r-t-r-membrane",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {
@@ -685,13 +687,15 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/helimend-trade-and-helimend-trade-advanced",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {
@@ -1202,15 +1206,17 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/micro-touch-reg-nitrafree-trade-pink",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [
         "category_path"
       ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {
@@ -1413,13 +1419,15 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/contour-reg",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {
@@ -1655,15 +1663,17 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/alasta-sup-reg-sup-white",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [
         "category_path"
       ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {
@@ -1756,13 +1766,15 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/polymed-reg",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {
@@ -1800,15 +1812,17 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/microflex-reg-comfortgrip-trade",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [
         "category_path"
       ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {
@@ -1824,15 +1838,17 @@
     },
     {
       "product_url": "https://www.safcodental.com/product/micropro-textured",
-      "variants_extracted": 1,
+      "variants_extracted": 0,
       "variants_complete": true,
-      "warnings": [],
+      "warnings": [
+        "grouped product page reports no child items in window.masterData"
+      ],
       "missing_expected_fields": [
         "category_path"
       ],
       "method_summary": {
         "product": "json_ld",
-        "variants": "json_ld_single_item"
+        "variants": "embedded_state_empty_grouped"
       }
     },
     {

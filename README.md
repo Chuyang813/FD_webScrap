@@ -46,15 +46,44 @@ LLM is optional and off by default when `--no-llm` is passed.
 | Metric | Value |
 |---|---:|
 | Product families discovered | 154 (56 sutures/surgical + 98 gloves) |
-| Product families extracted | **154 (100%)** |
-| Variants extracted | **760** |
+| Discovered family URLs represented in output | **154 of 154 (100%)** |
+| Families with current PDP child variants | **146** |
+| Current PDP child variant records | **752** |
+| Catalog-visible grouped parents with no current PDP child records | **8** |
 | Categories covered | 2 of 2 |
-| Extraction failures | 0 |
+| Committed full-catalog replay failures | 0 |
 | Cross-extractor agreement (core fields) | 0.997 over 12 sampled products |
-| Automated tests | 104 passing |
+| Automated tests | 106 passing |
 
-Both assigned categories are crawled to completion. The full run took about nine
-minutes at one request per second and required no retries.
+All 154 discovered family URLs across the two assigned categories are represented.
+Family coverage and current child inventory are reported separately because eight
+catalog-visible `grouped` parents currently expose no child records. On all
+eight live PDPs, both `masterData` and `productConfig` contain zero child records:
+
+| Grouped family path | Current PDP child records |
+|---|---:|
+| `/product/r-t-r-membrane` | 0 |
+| `/product/helimend-trade-and-helimend-trade-advanced` | 0 |
+| `/product/micro-touch-reg-nitrafree-trade-pink` | 0 |
+| `/product/contour-reg` | 0 |
+| `/product/alasta-sup-reg-sup-white` | 0 |
+| `/product/polymed-reg` | 0 |
+| `/product/microflex-reg-comfortgrip-trade` | 0 |
+| `/product/micropro-textured` | 0 |
+
+Algolia explains the apparent discrepancy as catalogue lifecycle lag rather than
+additional current inventory. Of 30 previously inferred candidate child IDs, 22
+resolve to simple records with both catalogue/search visibility set to `0` and status
+`Discontinued`; the remaining 8 have no Algolia hit. Those historical records are
+not emitted as current PDP child records. The resulting snapshot is 146 families
+with 752 current child variants, plus the 8 zero-child grouped parents.
+"Current" means present in the PDP's child data, not necessarily purchasable or
+in stock; every row preserves Safco's availability label, including one child
+currently marked `Non-purchasable`.
+The source live family crawl took about nine minutes at one request per second
+and required no retries. After correcting the grouped-parent handling, the
+committed artifacts were regenerated deterministically from that disk cache;
+the accompanying run report therefore records 168 cache hits and 0 HTTP calls.
 
 ---
 
@@ -128,7 +157,7 @@ in [`notes/recon.md`](notes/recon.md); the decisions it drove:
 
 | Finding | Consequence |
 |---|---|
-| Product JSON-LD and all grouped variants are present in the initial HTML | No browser automation; direct HTTP is the primary fetcher |
+| Product JSON-LD and current grouped-child state are present in the initial HTML; eight grouped parents expose zero children in both `masterData` and `productConfig` | Direct HTTP follows the current PDP state; discontinued or absent Algolia child records are not emitted as current inventory |
 | Safco runs Magento/Hyva with Algolia on the client | Category paging uses the public Algolia integration, not DOM scraping |
 | `robots.txt` disallows `/*?page=` and `/*?p=` | UI pagination is never requested; discovery uses the allowed path instead |
 | Prices, SKUs, stock, and pack text are public and server-rendered | Price visibility resolves to `public`; no authentication attempted |
@@ -141,11 +170,13 @@ in [`notes/recon.md`](notes/recon.md); the decisions it drove:
 
 **HTTP first, browser only if proven necessary.** The fetch layer sits behind a
 `Fetcher` protocol so the transport is a configuration decision, not an
-architectural one. Reconnaissance showed every required field is in the initial
-HTML, so a browser would have added a Chromium dependency, roughly an order of
-magnitude more latency per page, and a much heavier production scaling story for
-no additional data. A `BrowserFetcher` can be added behind the same interface
-without touching any downstream agent.
+architectural one. Reconnaissance showed the current PDP family and child state in
+the initial HTML. For the eight zero-child grouped parents, both embedded child
+sources are empty; the related Algolia records are discontinued and hidden, or no
+longer exist. Browser execution would not change that lifecycle signal, while it
+would add a Chromium dependency, roughly an order of magnitude more latency per
+page, and a much heavier production scaling story. A `BrowserFetcher` can be added
+behind the same interface without touching any downstream agent.
 
 **Deterministic extraction on the critical path; the LLM beside it.** Safco's
 product pages are well-templated. Sending each page to an LLM would be slower,
@@ -161,8 +192,9 @@ layout change in production.
 or accept the 15 families in the category JSON-LD, the Navigator reads the
 `window.algoliaConfig` that the allowed category page itself serves and queries
 the same public index the site's own front end uses. This reaches all 154 public
-families while staying inside the stated crawl policy. The JSON-LD list remains a
-documented degraded fallback if that integration changes.
+family URLs while staying inside the stated crawl policy. Family discovery and
+the current PDP child inventory are reported as separate lifecycle signals. The
+JSON-LD list remains a documented degraded fallback if that integration changes.
 
 **Plain Python agents rather than an agent framework.** The assignment asks for
 separated responsibilities, not a specific framework. Explicit classes keep
@@ -322,7 +354,7 @@ change is needed to retarget or retune the crawl.
 |---|---|
 | `data/catalog.db` | SQLite: `products`, `variants`, `crawl_state`, `crawl_errors` |
 | `output/products.json` | Nested products, each with its variants |
-| `output/products.csv` | Flat, one row per variant |
+| `output/products.csv` | Flat export: one row per variant, plus one parent-only row (blank variant columns) for each zero-child grouped family |
 | `output/run_report.json` | Status, metrics, discovery, completeness, provenance, audits |
 | `output/agreement_report.json` | Shadow evidence and field-level agreement, or skip reason |
 | `output/dashboard.html` | Self-contained data-quality dashboard |
@@ -331,8 +363,14 @@ Exports are regenerated from the database on every run, so they always reflect
 the full stored catalogue rather than only the rows one run touched. The
 agreement report is the exception: a run that produces no shadow samples leaves
 an existing populated report in place instead of overwriting it with an empty
-one, and records `"status": "preserved"` in the run report. Resuming an already
-complete crawl therefore cannot destroy earlier evidence.
+one, and records `"status": "preserved"` in the run report. Resuming an
+already-processed family crawl therefore cannot destroy earlier evidence.
+
+Because CSV is a flat table, the corrected snapshot contains 760 data rows: 752
+variant rows plus 8 parent-only rows for the grouped families that currently have
+no child records. SQLite and JSON count those as 154 products and 752 variant
+entities; the additional CSV rows preserve the eight parent products rather than
+inventing variants for them.
 
 ### Product
 
@@ -388,9 +426,18 @@ indistinguishable from correct behaviour.
 Products are keyed on canonical family URL. Variants prefer SKU
 (`variant_key = "sku:5106359"`), falling back to a stable combination of
 item/product identifiers and normalized option values. Both use upsert
-semantics, so repeated runs update rather than duplicate. A complete variant
-snapshot replaces stale variants; a degraded or incomplete snapshot is blocked
-from overwriting a known-good record.
+semantics, so repeated runs update rather than duplicate. A snapshot classified
+as complete replaces stale variants; a recognized degraded or incomplete snapshot
+is blocked from overwriting a known-good record. The eight zero-child grouped
+parents are intentional current-state records: their live PDP child configurations
+are empty, while related Algolia entries are discontinued/hidden or absent.
+
+Variant identity is deliberately scoped to its parent family. Safco currently
+cross-lists SKU `4180087` with the same item number, options, price, and stock under
+both the Myco Medical Reli-Pro and Look sutures family pages. The snapshot retains
+those two source relationships; it contains no duplicate variant identity within
+either family. A downstream inventory model that requires globally unique SKUs
+should split SKU entities from their many-to-many family memberships.
 
 ### Sample record
 
@@ -619,6 +666,14 @@ Concretely:
 
 Stated plainly rather than hidden; each notes what would resolve it.
 
+- **Catalogue lifecycle signals differ across sources.** Eight catalog-visible
+  grouped parents have zero children in both live PDP `masterData` and
+  `productConfig`. Of 30 historical candidate child IDs inferred from Algolia,
+  22 resolve only to hidden (`visibility_catalog=0`, `visibility_search=0`),
+  `Discontinued` simple records and 8 no longer resolve at all. The output follows
+  the current PDP state, yielding 146 families with 752 child variant records
+  and 8 zero-child parents. An approved catalogue feed would make lifecycle
+  reconciliation contractual rather than inferred across public sources.
 - **Specifications are empty.** Verified against cached product pages: Safco's
   product pages carry no specification markup at all. Emitted as `{}` with
   `not_available` provenance rather than fabricated. A specification feed or
@@ -664,7 +719,7 @@ Stated plainly rather than hidden; each notes what would resolve it.
 
 ## Testing
 
-104 tests, no network access required. Provider traffic is mocked, so the suite
+106 tests, no network access required. Provider traffic is mocked, so the suite
 spends no API quota:
 
 ```bash
@@ -696,7 +751,7 @@ means a future selector change can be tested before deployment.
 
 | Decision | Chosen | Rejected | Why |
 |---|---|---|---|
-| Transport | Direct HTTP | Playwright default | Recon proved all required fields are server-rendered; browser adds latency and a Chromium dependency for no data |
+| Transport | Direct HTTP | Playwright default | Current PDP state is server-rendered; the eight zero-child grouped parents are explained by discontinued/hidden or absent Algolia records, not a rendering gap |
 | AI placement | Shadow + recovery | LLM on every page | Deterministic parsing of stable templates is cheaper, testable, reproducible; shadow mode still yields a live drift signal |
 | Discovery | Public Algolia index | `?page=N` crawling | `robots.txt` disallows the query pagination; Algolia reaches all 154 families within policy |
 | Storage | SQLite | PostgreSQL | Zero-setup transactions and durable state for a reviewer; repository boundary keeps migration cheap |

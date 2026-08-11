@@ -523,7 +523,7 @@ def render_dashboard(data: DashboardData) -> str:
             f"of {data.discovered:,} discovered" if data.discovered else "",
             hero=True,
         ),
-        _tile("Variants", f"{data.variants:,}", "purchasable child items"),
+        _tile("Variants", f"{data.variants:,}", "current PDP child records"),
         _tile("Coverage", _pct(coverage) if coverage is not None else "n/a", "extracted of discovered"),
         _tile("Failures", f"{failures:,}" if failures is not None else "n/a", "in the last run"),
     ]

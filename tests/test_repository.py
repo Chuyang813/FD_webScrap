@@ -1,6 +1,8 @@
 import csv
 import json
+from pathlib import Path
 
+from extraction import DeterministicProductExtractor
 from models import (
     CrawlStatus,
     ExtractionResult,
@@ -11,6 +13,12 @@ from models import (
     ProductVariant,
 )
 from storage import ProductRepository, build_variant_key, export_products_csv, export_products_json
+
+
+FIXTURES = Path(__file__).parent / "fixtures"
+EMPTY_GROUPED_URL = (
+    "https://www.safcodental.com/product/micro-touch-reg-nitrafree-trade-pink"
+)
 
 
 def make_product(name: str = "Nitrile Gloves") -> Product:
@@ -141,6 +149,41 @@ def test_json_and_csv_exports_preserve_variants(tmp_path) -> None:
     assert len(rows) == 1
     assert rows[0]["product_name"] == "Nitrile Gloves"
     assert rows[0]["sku"] == "SKU-M"
+
+
+def test_empty_grouped_snapshot_removes_parent_variant_and_exports_parent_row(tmp_path) -> None:
+    repository = ProductRepository(tmp_path / "catalog.db")
+    html = (FIXTURES / "single_item_product.html").read_text(encoding="utf-8")
+    result = DeterministicProductExtractor().extract(html, EMPTY_GROUPED_URL)
+    stale_parent = ProductVariant(
+        product_url=EMPTY_GROUPED_URL,
+        sku="DRCDA",
+        price="15.99",
+        currency="USD",
+        availability="In Stock",
+    )
+    repository.upsert_product(
+        result.product.model_copy(update={"name": "Stale aggregate record"}),
+        [stale_parent],
+    )
+
+    repository.upsert_extraction(result)
+    json_path = export_products_json(repository, tmp_path / "out" / "products.json")
+    csv_path = export_products_csv(repository, tmp_path / "out" / "products.csv")
+
+    assert repository.count_products() == 1
+    assert repository.count_variants() == 0
+    stored = repository.get_product(EMPTY_GROUPED_URL)
+    assert stored is not None
+    assert stored.name == "Micro-Touch NitraFree Pink"
+    assert json.loads(json_path.read_text(encoding="utf-8"))[0]["variants"] == []
+    with csv_path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 1
+    assert rows[0]["product_name"] == "Micro-Touch NitraFree Pink"
+    assert rows[0]["sku"] == ""
+    assert rows[0]["price"] == ""
+    assert rows[0]["variant_options_json"] == "{}"
 
 
 def test_database_contains_only_the_four_domain_tables(tmp_path) -> None:
