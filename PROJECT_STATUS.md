@@ -69,11 +69,11 @@ Items are marked complete only when backed by automated or live-run evidence.
   `microflex-reg-comfortgrip-trade`, and `micropro-textured`) remain catalog-visible
   parents but expose zero children in both live PDP `masterData` and
   `productConfig`. Of 30 historical candidate child IDs inferred from Algolia,
-  22 resolve to simple records marked `Discontinued` with
-  `visibility_catalog=0` and `visibility_search=0`; the other 8 have no Algolia
-  hit. These are lifecycle remnants, not current PDP child records, so the
-  corrected output count is 752
-  variants across 146 families plus 8 zero-child parent records.
+  22 resolve to simple records with `visibility_catalog=0` and
+  `visibility_search=0`; the other 8 resolve to no record at all. Neither set is
+  currently listed inventory, so neither is emitted as a current PDP child
+  record, and the corrected output count is 752 variants across 146 families
+  plus 8 zero-child parent records.
 - **Cross-family SKU membership:** Safco exposes SKU `4180087` with identical
   item number, options, price, and stock under two distinct suture family pages.
   The repository therefore retains two family memberships while preventing

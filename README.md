@@ -73,9 +73,9 @@ eight live PDPs, both `masterData` and `productConfig` contain zero child record
 
 Algolia explains the apparent discrepancy as catalogue lifecycle lag rather than
 additional current inventory. Of 30 previously inferred candidate child IDs, 22
-resolve to simple records with both catalogue/search visibility set to `0` and status
-`Discontinued`; the remaining 8 have no Algolia hit. Those historical records are
-not emitted as current PDP child records. The resulting snapshot is 146 families
+resolve to simple records with both `visibility_catalog` and `visibility_search`
+set to `0`; the remaining 8 resolve to no record at all. Neither set is currently
+listed inventory, so neither is emitted as a current PDP child record. The resulting snapshot is 146 families
 with 752 current child variants, plus the 8 zero-child grouped parents.
 "Current" means present in the PDP's child data, not necessarily purchasable or
 in stock; every row preserves Safco's availability label, including one child
@@ -157,7 +157,7 @@ in [`notes/recon.md`](notes/recon.md); the decisions it drove:
 
 | Finding | Consequence |
 |---|---|
-| Product JSON-LD and current grouped-child state are present in the initial HTML; eight grouped parents expose zero children in both `masterData` and `productConfig` | Direct HTTP follows the current PDP state; discontinued or absent Algolia child records are not emitted as current inventory |
+| Product JSON-LD and current grouped-child state are present in the initial HTML; eight grouped parents expose zero children in both `masterData` and `productConfig` | Direct HTTP follows the current PDP state; hidden or absent Algolia child records are not emitted as current inventory |
 | Safco runs Magento/Hyva with Algolia on the client | Category paging uses the public Algolia integration, not DOM scraping |
 | `robots.txt` disallows `/*?page=` and `/*?p=` | UI pagination is never requested; discovery uses the allowed path instead |
 | Prices, SKUs, stock, and pack text are public and server-rendered | Price visibility resolves to `public`; no authentication attempted |
@@ -172,8 +172,8 @@ in [`notes/recon.md`](notes/recon.md); the decisions it drove:
 `Fetcher` protocol so the transport is a configuration decision, not an
 architectural one. Reconnaissance showed the current PDP family and child state in
 the initial HTML. For the eight zero-child grouped parents, both embedded child
-sources are empty; the related Algolia records are discontinued and hidden, or no
-longer exist. Browser execution would not change that lifecycle signal, while it
+sources are empty; the related Algolia records are hidden, or absent
+entirely. Browser execution would not change that lifecycle signal, while it
 would add a Chromium dependency, roughly an order of magnitude more latency per
 page, and a much heavier production scaling story. A `BrowserFetcher` can be added
 behind the same interface without touching any downstream agent.
@@ -430,7 +430,7 @@ semantics, so repeated runs update rather than duplicate. A snapshot classified
 as complete replaces stale variants; a recognized degraded or incomplete snapshot
 is blocked from overwriting a known-good record. The eight zero-child grouped
 parents are intentional current-state records: their live PDP child configurations
-are empty, while related Algolia entries are discontinued/hidden or absent.
+are empty, while related Algolia entries are hidden or absent.
 
 Variant identity is deliberately scoped to its parent family. Safco currently
 cross-lists SKU `4180087` with the same item number, options, price, and stock under
@@ -669,8 +669,8 @@ Stated plainly rather than hidden; each notes what would resolve it.
 - **Catalogue lifecycle signals differ across sources.** Eight catalog-visible
   grouped parents have zero children in both live PDP `masterData` and
   `productConfig`. Of 30 historical candidate child IDs inferred from Algolia,
-  22 resolve only to hidden (`visibility_catalog=0`, `visibility_search=0`),
-  `Discontinued` simple records and 8 no longer resolve at all. The output follows
+  22 resolve only to hidden simple records (`visibility_catalog=0`,
+  `visibility_search=0`) and 8 resolve to no record at all. The output follows
   the current PDP state, yielding 146 families with 752 child variant records
   and 8 zero-child parents. An approved catalogue feed would make lifecycle
   reconciliation contractual rather than inferred across public sources.
@@ -751,7 +751,7 @@ means a future selector change can be tested before deployment.
 
 | Decision | Chosen | Rejected | Why |
 |---|---|---|---|
-| Transport | Direct HTTP | Playwright default | Current PDP state is server-rendered; the eight zero-child grouped parents are explained by discontinued/hidden or absent Algolia records, not a rendering gap |
+| Transport | Direct HTTP | Playwright default | Current PDP state is server-rendered; the eight zero-child grouped parents are explained by hidden or absent Algolia records, not a rendering gap |
 | AI placement | Shadow + recovery | LLM on every page | Deterministic parsing of stable templates is cheaper, testable, reproducible; shadow mode still yields a live drift signal |
 | Discovery | Public Algolia index | `?page=N` crawling | `robots.txt` disallows the query pagination; Algolia reaches all 154 families within policy |
 | Storage | SQLite | PostgreSQL | Zero-setup transactions and durable state for a reviewer; repository boundary keeps migration cheap |
